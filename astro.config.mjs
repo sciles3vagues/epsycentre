@@ -22,7 +22,8 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'Manrope',
       cssVariable: '--font-manrope',
-      weights: [400, 500, 700],
+      // Variable font (one file for the whole range): lets font-weight animate smoothly (nav hover 500 → 700).
+      weights: ['400 700'],
       styles: ['normal'],
       subsets: ['latin'],
       formats: ['woff2'],
