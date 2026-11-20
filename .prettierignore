@@ -1,0 +1,8 @@
+dist
+.astro
+node_modules
+public
+playwright-report
+test-results
+pnpm-lock.yaml
+.env*

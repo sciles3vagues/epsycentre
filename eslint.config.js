@@ -1,0 +1,76 @@
+import eslint from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
+import astro from 'eslint-plugin-astro';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default defineConfig(
+  globalIgnores(['dist/', '.astro/', 'node_modules/', 'playwright-report/', 'test-results/', 'public/']),
+
+  // Base: JS + TypeScript (all files)
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+  {
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
+      ],
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-debugger': 'error',
+      'no-alert': 'error',
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
+    },
+  },
+
+  // Type-aware rules for TS/TSX source files
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [tseslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname },
+    },
+    rules: {
+      '@typescript-eslint/strict-boolean-expressions': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+    },
+  },
+
+  // React components (.tsx) — hooks + strict a11y
+  {
+    files: ['**/*.tsx'],
+    extends: [
+      react.configs.flat.recommended,
+      react.configs.flat['jsx-runtime'],
+      reactHooks.configs.flat.recommended,
+      jsxA11y.flatConfigs.strict,
+    ],
+    settings: { react: { version: 'detect' } },
+    rules: {
+      'react/prop-types': 'off',
+      'react/no-array-index-key': 'error',
+      'react/jsx-no-useless-fragment': 'error',
+      'react/self-closing-comp': 'error',
+    },
+  },
+
+  // Astro components — recommended + strict a11y (WCAG/RGAA)
+  astro.configs.recommended,
+  astro.configs['jsx-a11y-strict'],
+
+  // Must stay last: disables stylistic rules that conflict with Prettier
+  eslintConfigPrettier
+);
