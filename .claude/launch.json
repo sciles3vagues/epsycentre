@@ -4,13 +4,13 @@
     {
       "name": "dev",
       "runtimeExecutable": "/bin/bash",
-      "runtimeArgs": ["-lc", "source \"$HOME/.nvm/nvm.sh\" && nvm use >/dev/null && pnpm dev"],
+      "runtimeArgs": ["-c", "source \"$HOME/.nvm/nvm.sh\" && nvm use >/dev/null && pnpm dev"],
       "port": 4321
     },
     {
       "name": "preview",
       "runtimeExecutable": "/bin/bash",
-      "runtimeArgs": ["-lc", "source \"$HOME/.nvm/nvm.sh\" && nvm use >/dev/null && pnpm build && pnpm preview"],
+      "runtimeArgs": ["-c", "source \"$HOME/.nvm/nvm.sh\" && nvm use >/dev/null && pnpm build && pnpm preview"],
       "port": 4321
     }
   ]
