@@ -30,7 +30,7 @@ pnpm lint             # ESLint (incl. jsx-a11y strict on .astro and .tsx)
 pnpm lint:fix
 pnpm format           # Prettier (sorts imports + Tailwind classes)
 pnpm format:check
-pnpm test:e2e         # Playwright: axe WCAG A/AA scan + keyboard/SEO checks on the production build
+pnpm test:e2e         # Playwright: axe WCAG A/AA scan + keyboard/SEO + header checks on the production build
 pnpm validate         # everything CI runs
 ```
 
@@ -43,11 +43,12 @@ src/
 ├── pages/        # file-based routes (.astro); robots.txt.ts and llms.txt.ts are generated endpoints
 ├── layouts/      # Layout.astro — <html lang>, <head>, skip link, <main id="contenu">
 ├── components/   # .astro (static) or .tsx (interactive islands only); Seo.astro = all meta tags
-├── config/       # site.ts — site name, locale, default description/OG image
-├── lib/          # framework-agnostic helpers (cn.ts)
+├── config/       # site.ts (name, locale, booking URL…), navigation.ts (nav links), breakpoints.ts (media queries shared with scripts)
+├── lib/          # framework-agnostic helpers (cn.ts, dom.ts, on-scroll-frame.ts)
+├── scripts/      # client-side behaviour as TS modules (dialog.ts, header/*) — imported by a one-line <script> in components
 ├── styles/       # global.css — Tailwind import, @theme tokens, base a11y styles
 └── assets/       # images processed by astro:assets
-tests/            # Playwright specs (a11y.spec.ts — add each new route to ROUTES)
+tests/            # Playwright specs (a11y.spec.ts — add each new route to ROUTES; header.spec.ts)
 public/           # files served as-is (favicons, OG images, fonts)
 ```
 
@@ -98,7 +99,10 @@ Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:5
 - **Other**: `bg-gradient-tcce` (orange gradient), radii `rounded-card` (30px), `rounded-box` (20px), `rounded-pill` (40px).
 - **Logos** (`src/assets/logo/`, `fill="currentColor"` → colour with tokens): `logo-epsycentre.svg` (symbol + brand name, 400×49) and `logo-symbole.svg` (symbol only, 49×49). Import as components: `import Logo from "@/assets/logo/logo-epsycentre.svg"`. Brand colours: `text-mandarine` on light backgrounds, `text-texte-clair` on the hero photo and orange gradient. In a home link: `<a href="/" aria-label="Epsycentre, accueil"><Logo aria-hidden="true" /></a>`; standalone: `<Logo role="img" aria-label="Epsycentre" />`. Favicons in `public/` are generated from the symbol.
 - **UI components** (`src/components/ui/`): `Cta.astro` = Figma "Boutons" — `<Cta href={SITE.bookingUrl} tone="clair|secondary|tertiary|mandarine" variant="outline|solid">Prendre RDV</Cta>` (outline fills on hover/focus; renders `<a>` with `href`, else `<button>`). Page sections live in `src/components/sections/` (`Hero.astro`).
-- **Note**: axe cannot measure contrast on gradient/image backgrounds (reported as "incomplete", not a failure) — check those combinations manually.
+- **Component rules**: markup only in `.astro`; behaviour goes in `src/scripts/*.ts` (one responsibility per file) and is loaded with `<script>import { initX } from '@/scripts/…'; initX();</script>`. Styles: Tailwind first; CSS Modules (`Component.module.css`) only for what utilities can't express cleanly — no `<style>` blocks. Keep components DRY/KISS/SRP.
+- **Dialogs**: `ui/Sheet.astro` (full-screen native `<dialog>` + `Sheet.module.css` slide animation) driven by `src/scripts/dialog.ts` via data attributes (`data-dialog-open="id"`, `data-dialog-close`, `data-dialog-focus`). Page scroll is locked globally while any modal is open (`global.css`). Reuse it for the booking modal. `ui/IconButton.astro` for icon-only buttons (`label` = accessible name).
+- **Header** (`src/components/header/`, included by `Layout`): `Header.astro` (state; behaviour in `src/scripts/header/`) wraps `HeaderDesktop.astro` (xl+) and `HeaderMobile.astro` (< xl, menu in a `Sheet`). Shared pieces: `NavLink.astro` (bold-hover link), `HomeLink.astro` (logo link). Links come from `src/config/navigation.ts`. **Every full-width section must declare `data-header-tone`**: `"clair"` on orange/photo backgrounds, `"mandarine"` on light ones — the fixed header takes the colour of the section under it. Section `id`s must match the nav hrefs (`notre-centre`, `equipe`, `tcce`, `groupes`, `acces`, `faq`).
+- **Note**: axe (tests and DevTools) and Lighthouse cannot measure contrast on gradient/image backgrounds — check those combinations manually.
 
 ## TypeScript & code style
 
