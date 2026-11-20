@@ -1,4 +1,6 @@
 ---
+import { Font } from 'astro:assets';
+
 import Seo from '@/components/Seo.astro';
 import { SITE } from '@/config/site';
 
@@ -20,6 +22,9 @@ const props = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <meta name="generator" content={Astro.generator} />
+    <!-- Preload only the above-the-fold weights: Manrope 700 (titles) and Inter 400 (body). -->
+    <Font cssVariable="--font-manrope" preload={[{ weight: '700' }]} />
+    <Font cssVariable="--font-inter" preload={[{ weight: '400' }]} />
     <Seo {...props} />
     <slot name="head" />
   </head>

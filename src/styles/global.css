@@ -1,8 +1,88 @@
 @import 'tailwindcss';
 
+/* Font families are injected by Astro's Fonts API (astro.config.mjs → fonts, <Font /> in Layout). */
+@theme inline {
+  --font-heading: var(--font-manrope);
+  --font-sans: var(--font-inter);
+}
+
 @theme {
-  /* Design tokens — keep text/background pairs at WCAG AA contrast (4.5:1 text, 3:1 UI). */
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* ---------- Colors (Figma variables) ---------- */
+  --color-primary-50: #ffeee5; /* "Primary 50" — alias "Texte clair" */
+  --color-texte-clair: var(--color-primary-50);
+  --color-secondary: #1de4c3; /* "Secondary" — turquoise */
+  --color-tertiary: #2f7ce6; /* "Tertiary" — blue */
+  --color-mandarine: #f47d4a; /* "Mandarine" — gradient end */
+  --color-abricot: #f4a04a; /* gradient start ("Degradé TCCE") */
+  --color-noir: #121212; /* "Noir" — body text */
+  --color-fond: #fbf9f5; /* "Fond" — alternate section background */
+
+  /*
+   * ---------- Accessible text variants (NOT in Figma — to validate with the designer) ----------
+   * secondary / mandarine / primary-50 don't reach WCAG contrast on light or orange backgrounds.
+   * Same hue, darkened to ≥ 4.5:1 on --color-fond (and white).
+   * ON HOLD: do not use in components yet — the team develops with the designer colors and will
+   * decide on contrast fixes with the designer later.
+   */
+  --color-secondary-strong: #10816e; /* 4.55:1 on fond */
+  --color-tertiary-strong: #2b71d2; /* 4.54:1 on fond (tertiary itself is 3.88:1 → large text only) */
+  --color-mandarine-strong: #b25b36; /* 4.50:1 on fond */
+
+  /* ---------- Typography (Figma text styles, desktop) ---------- */
+  /* "Titre" — Manrope Bold 48/50 */
+  --text-titre: 3rem;
+  --text-titre--line-height: 3.125rem;
+  --text-titre--font-weight: 700;
+  /* "Grand texte" — Manrope Bold 36/40 */
+  --text-grand: 2.25rem;
+  --text-grand--line-height: 2.5rem;
+  --text-grand--font-weight: 700;
+  /* Buttons & menu — Manrope Medium 24/28 */
+  --text-bouton: 1.5rem;
+  --text-bouton--line-height: 1.75rem;
+  --text-bouton--font-weight: 500;
+  /* "Nom membre équipe" — Inter Semi Bold 24/26 */
+  --text-nom: 1.5rem;
+  --text-nom--line-height: 1.625rem;
+  --text-nom--font-weight: 600;
+  /* "Texte" — Inter Regular 20/26 */
+  --text-corps: 1.25rem;
+  --text-corps--line-height: 1.625rem;
+  --text-corps--font-weight: 400;
+  /* "Description membre equipe" — Inter Regular 16/20 */
+  --text-petit: 1rem;
+  --text-petit--line-height: 1.25rem;
+  --text-petit--font-weight: 400;
+
+  /* ---------- Radii (recurring in the design) ---------- */
+  --radius-card: 1.875rem; /* 30px — cards, images, group pills */
+  --radius-box: 1.25rem; /* 20px — info boxes */
+  --radius-pill: 2.5rem; /* 40px — buttons */
+}
+
+/* ---------- Composite text styles (family + size + line-height + weight) ---------- */
+@utility typo-titre {
+  @apply font-heading text-titre;
+}
+@utility typo-grand {
+  @apply font-heading text-grand;
+}
+@utility typo-bouton {
+  @apply font-heading text-bouton;
+}
+@utility typo-nom {
+  @apply font-sans text-nom;
+}
+@utility typo-corps {
+  @apply font-sans text-corps;
+}
+@utility typo-petit {
+  @apply font-sans text-petit;
+}
+
+/* "Degradé TCCE" — orange gradient (100° on sections; footer uses 169° → bg-linear-169 from-abricot to-mandarine). */
+@utility bg-gradient-tcce {
+  background-image: linear-gradient(100deg, var(--color-abricot) 0%, var(--color-mandarine) 100%);
 }
 
 @layer base {
@@ -13,7 +93,14 @@
   }
 
   body {
-    @apply bg-white font-sans text-neutral-900 antialiased;
+    @apply bg-white typo-corps text-noir antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
   }
 
   /* Visible focus indicator for keyboard users (WCAG 2.4.7 / 2.4.11, RGAA 10.7). */
