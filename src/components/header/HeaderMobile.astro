@@ -1,0 +1,62 @@
+---
+import CloseIcon from '@/assets/icons/close.svg';
+import MenuIcon from '@/assets/icons/menu.svg';
+import LogoEpsycentre from '@/assets/logo/logo-epsycentre.svg';
+import LogoSymbole from '@/assets/logo/logo-symbole.svg';
+import HomeLink from '@/components/header/HomeLink.astro';
+import NavLink from '@/components/header/NavLink.astro';
+import IconButton from '@/components/ui/IconButton.astro';
+import Sheet from '@/components/ui/Sheet.astro';
+import { MEDIA } from '@/config/breakpoints';
+import { NAV_LINKS } from '@/config/navigation';
+
+/**
+ * Mobile header (< xl) — Figma: top (176:462, full logo), scrolling (218:1867 / 218:1889, symbol only),
+ * open menu (218:1822).
+ */
+const MENU_ID = 'menu-mobile';
+---
+
+<div class="flex items-center justify-between px-5 pt-10 group-data-[sticky=true]/header:py-4 motion-safe:transition-[padding] motion-safe:duration-300 xl:hidden">
+  <HomeLink>
+    <LogoEpsycentre aria-hidden="true" focusable="false" class="h-auto w-50 group-data-[sticky=true]/header:hidden" />
+    <LogoSymbole aria-hidden="true" focusable="false" class="hidden size-6 group-data-[sticky=true]/header:block" />
+  </HomeLink>
+
+  <IconButton
+    label="Ouvrir le menu"
+    data-dialog-open={MENU_ID}
+    aria-haspopup="dialog"
+    aria-controls={MENU_ID}
+    aria-expanded="false"
+  >
+    <MenuIcon aria-hidden="true" focusable="false" class="size-8.5" />
+  </IconButton>
+</div>
+
+<Sheet id={MENU_ID} label="Menu" closeAt={MEDIA.desktopHeader} class="bg-gradient-tcce text-texte-clair">
+  <div class="flex min-h-full flex-col gap-37.5 px-5 py-10">
+    <div class="flex items-center justify-between">
+      <HomeLink>
+        <LogoEpsycentre aria-hidden="true" focusable="false" class="h-auto w-50" />
+      </HomeLink>
+      <IconButton label="Fermer le menu" data-dialog-close data-dialog-focus>
+        <CloseIcon aria-hidden="true" focusable="false" class="size-8.5" />
+      </IconButton>
+    </div>
+
+    <nav aria-label="Navigation principale">
+      <ul class="flex flex-col items-center text-center">
+        {NAV_LINKS.map(link => (
+          <li>
+            <NavLink
+              href={link.href}
+              label={'mobileLabel' in link ? link.mobileLabel : link.label}
+              class="leading-12.5 uppercase"
+            />
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Sheet>

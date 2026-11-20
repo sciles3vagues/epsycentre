@@ -1,0 +1,25 @@
+---
+import { cn } from '@/lib/cn';
+
+/**
+ * Navigation link — Manrope Medium → Bold on hover/focus (300ms ease-in-out, off with reduced motion).
+ * The invisible bold copy reserves the bold width so neighbours never shift; it is aria-hidden,
+ * so the accessible name stays the label once.
+ */
+interface Props {
+  href: string;
+  label: string;
+  class?: string;
+}
+
+const { href, label, class: className } = Astro.props;
+---
+
+<a href={href} class={cn('group/link grid font-heading text-bouton', className)}>
+  <span class="col-start-1 row-start-1 group-hover/link:font-bold group-focus-visible/link:font-bold motion-safe:transition-[font-weight] motion-safe:duration-300 motion-safe:ease-in-out">
+    {label}
+  </span>
+  <span aria-hidden="true" class="invisible col-start-1 row-start-1 font-bold">
+    {label}
+  </span>
+</a>

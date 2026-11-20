@@ -66,6 +66,20 @@
   --radius-card: 1.875rem; /* 30px — cards, images, group pills */
   --radius-box: 1.25rem; /* 20px — info boxes */
   --radius-pill: 2.5rem; /* 40px — buttons */
+
+  /* ---------- Motion ---------- */
+  --animate-header-in: header-in 350ms ease; /* fixed header slide-in (always used with motion-safe:) */
+
+  @keyframes header-in {
+    from {
+      transform: translateY(-2rem);
+      opacity: 0.9;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }
 
 /* ---------- Composite text styles (family + size + line-height + weight) ---------- */
@@ -106,6 +120,21 @@
     /* Respect user font-size settings (RGAA 10.4 / WCAG 1.4.4): never set a px root size. */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Keep anchor targets and focused elements clear of the fixed header (WCAG 2.4.11). */
+    scroll-padding-top: 4.5rem;
+
+    @variant xl {
+      scroll-padding-top: 6.5rem;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Lock page scroll while any modal dialog is open (mobile menu, future booking modal…). */
+  html:has(dialog:modal) {
+    overflow: hidden;
   }
 
   body {

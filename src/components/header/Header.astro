@@ -1,0 +1,33 @@
+---
+import HeaderDesktop from '@/components/header/HeaderDesktop.astro';
+import HeaderMobile from '@/components/header/HeaderMobile.astro';
+
+// TODO: finish this and review when other sections ready
+/**
+ * Site header (banner landmark). Renders the desktop (xl+) and mobile (< xl) variants; only one is displayed,
+ * so only one is exposed to assistive tech.
+ *
+ * State, set by src/scripts/header/* and consumed by children via `group-data-*` variants:
+ * - `data-sticky`: header leaves the page flow and becomes fixed once the user has scrolled a bit (sticky-header.ts),
+ *   with a slide-in animation (disabled with prefers-reduced-motion).
+ * - `data-tone`: colour of the header, picked from the section currently under it (`data-header-tone` on sections):
+ *   `clair` (peach cream, on orange/photo backgrounds) or `mandarine` (on light backgrounds — the default).
+ * Every child (text, SVG logo, burger icon) uses `currentColor`, so the tone is a single `color` change.
+ */
+---
+
+<header
+  data-site-header
+  data-sticky="false"
+  data-tone="clair"
+  class="group/header absolute inset-x-0 top-0 z-50 text-texte-clair data-[sticky=true]:fixed data-[tone=mandarine]:text-mandarine motion-safe:transition-colors motion-safe:duration-300 motion-safe:data-[sticky=true]:animate-header-in"
+>
+  <HeaderDesktop />
+  <HeaderMobile />
+</header>
+
+<script>
+  import { initHeader } from '@/scripts/header/init-header';
+
+  initHeader();
+</script>

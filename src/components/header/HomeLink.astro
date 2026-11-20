@@ -1,0 +1,14 @@
+---
+import { SITE } from '@/config/site';
+
+/** Link to the home page wrapping a logo (pass the logo, aria-hidden, in the slot). */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<a href="/" aria-label={`${SITE.name}, accueil`} class={className}>
+  <slot />
+</a>

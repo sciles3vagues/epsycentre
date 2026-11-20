@@ -1,0 +1,17 @@
+---
+import { cn } from '@/lib/cn';
+
+import type { HTMLAttributes } from 'astro/types';
+
+/** Icon-only button: `label` is its accessible name; pass the icon (aria-hidden) in the slot. */
+interface Props extends Omit<HTMLAttributes<'button'>, 'class' | 'type' | 'aria-label'> {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className, ...rest } = Astro.props;
+---
+
+<button type="button" aria-label={label} class={cn('-m-1 p-1', className)} {...rest}>
+  <slot />
+</button>

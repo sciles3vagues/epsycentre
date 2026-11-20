@@ -1,6 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 
+import Header from '@/components/header/Header.astro';
 import Seo from '@/components/Seo.astro';
 import { SITE } from '@/config/site';
 
@@ -37,7 +38,7 @@ const props = Astro.props;
     >
       Aller au contenu principal
     </a>
-    <slot name="header" />
+    <Header />
     <main id="contenu" tabindex="-1" class="flex-1 focus:outline-none">
       <slot />
     </main>

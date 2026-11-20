@@ -1,0 +1,23 @@
+/* Full-screen sheet sliding in from the right. Exit animation relies on allow-discrete (display/overlay). */
+.sheet {
+  translate: 100% 0;
+}
+
+.sheet[open] {
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet {
+    transition:
+      translate 350ms ease,
+      overlay 350ms ease allow-discrete,
+      display 350ms ease allow-discrete;
+  }
+
+  @starting-style {
+    .sheet[open] {
+      translate: 100% 0;
+    }
+  }
+}

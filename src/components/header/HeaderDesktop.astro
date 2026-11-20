@@ -1,0 +1,25 @@
+---
+import LogoEpsycentre from '@/assets/logo/logo-epsycentre.svg';
+import HomeLink from '@/components/header/HomeLink.astro';
+import NavLink from '@/components/header/NavLink.astro';
+import { NAV_LINKS } from '@/config/navigation';
+
+/** Desktop header (xl+) — Figma "Header" (node 95:153). */
+---
+
+<div class="hidden items-center justify-between px-12.5 pt-12.5 group-data-[sticky=true]/header:py-6 motion-safe:transition-[padding] motion-safe:duration-300 xl:flex">
+  <HomeLink class="shrink-0">
+    <LogoEpsycentre aria-hidden="true" focusable="false" class="h-auto w-100" />
+  </HomeLink>
+
+  <!-- Right-aligned links; gap is fluid: 8px @1280 → 16px @1440 (Figma) → capped at 24px from 1600px. -->
+  <nav aria-label="Navigation principale" class="pl-8">
+    <ul class="flex items-center justify-end gap-x-[clamp(0.5rem,5vw-3.5rem,1.5rem)]">
+      {NAV_LINKS.map(({ label, href }) => (
+        <li>
+          <NavLink href={href} label={label} class="p-2 whitespace-nowrap" />
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
