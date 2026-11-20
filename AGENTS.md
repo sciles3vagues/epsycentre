@@ -96,6 +96,7 @@ Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:5
 - **Fonts**: `font-heading` (Manrope 500/700), `font-sans` (Inter 400/600/700), self-hosted via Astro Fonts API (`astro.config.mjs` → `fonts`, `<Font />` in Layout). Adding a weight = add it to `weights` there.
 - **Text styles**: `typo-titre` (48/50 bold), `typo-grand` (36/40 bold), `typo-bouton` (24/28 medium), `typo-nom` (24/26 semibold), `typo-corps` (20/26, body default), `typo-petit` (16/20).
 - **Other**: `bg-gradient-tcce` (orange gradient), radii `rounded-card` (30px), `rounded-box` (20px), `rounded-pill` (40px).
+- **Logos** (`src/assets/logo/`, `fill="currentColor"` → colour with tokens): `logo-epsycentre.svg` (symbol + brand name, 400×49) and `logo-symbole.svg` (symbol only, 49×49). Import as components: `import Logo from "@/assets/logo/logo-epsycentre.svg"`. Brand colours: `text-mandarine` on light backgrounds, `text-texte-clair` on the hero photo and orange gradient. In a home link: `<a href="/" aria-label="Epsycentre, accueil"><Logo aria-hidden="true" /></a>`; standalone: `<Logo role="img" aria-label="Epsycentre" />`. Favicons in `public/` are generated from the symbol.
 
 ## TypeScript & code style
 
