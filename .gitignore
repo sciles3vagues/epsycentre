@@ -22,3 +22,17 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# playwright
+playwright-report/
+test-results/
+blob-report/
+
+# editor (keep shared VS Code config)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# claude code (personal settings only)
+.claude/settings.local.json
