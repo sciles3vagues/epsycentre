@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Design tokens — keep text/background pairs at WCAG AA contrast (4.5:1 text, 3:1 UI). */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    /* Respect user font-size settings (RGAA 10.4 / WCAG 1.4.4): never set a px root size. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-neutral-900 antialiased;
+  }
+
+  /* Visible focus indicator for keyboard users (WCAG 2.4.7 / 2.4.11, RGAA 10.7). */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-current;
+  }
+
+  /* Respect reduced-motion preferences (WCAG 2.3.3). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

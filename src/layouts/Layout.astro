@@ -1,23 +1,40 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import Seo from '@/components/Seo.astro';
+import { SITE } from '@/config/site';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+import '@/styles/global.css';
+
+import type { Props as SeoProps } from '@/components/Seo.astro';
+
+export type Props = SeoProps;
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <meta name="generator" content={Astro.generator} />
+    <Seo {...props} />
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <!-- Skip link (RGAA 12.7 / WCAG 2.4.1) -->
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:px-4 focus:py-2"
+    >
+      Aller au contenu principal
+    </a>
+    <slot name="header" />
+    <main id="contenu" tabindex="-1" class="flex-1 focus:outline-none">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>
