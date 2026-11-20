@@ -22,7 +22,7 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'Manrope',
       cssVariable: '--font-manrope',
-      weights: [500, 700],
+      weights: [400, 500, 700],
       styles: ['normal'],
       subsets: ['latin'],
       formats: ['woff2'],

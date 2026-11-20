@@ -33,6 +33,10 @@
   --text-titre: 3rem;
   --text-titre--line-height: 3.125rem;
   --text-titre--font-weight: 700;
+  /* Titre on mobile (Figma mobile hero) — Manrope Bold 24/28 */
+  --text-titre-mobile: 1.5rem;
+  --text-titre-mobile--line-height: 1.75rem;
+  --text-titre-mobile--font-weight: 700;
   /* "Grand texte" — Manrope Bold 36/40 */
   --text-grand: 2.25rem;
   --text-grand--line-height: 2.5rem;
@@ -41,6 +45,10 @@
   --text-bouton: 1.5rem;
   --text-bouton--line-height: 1.75rem;
   --text-bouton--font-weight: 500;
+  /* Buttons on mobile ("Boutons mobile") — Manrope Regular 16/16 */
+  --text-bouton-mobile: 1rem;
+  --text-bouton-mobile--line-height: 1rem;
+  --text-bouton-mobile--font-weight: 400;
   /* "Nom membre équipe" — Inter Semi Bold 24/26 */
   --text-nom: 1.5rem;
   --text-nom--line-height: 1.625rem;
@@ -80,9 +88,17 @@
   @apply font-sans text-petit;
 }
 
-/* "Degradé TCCE" — orange gradient (100° on sections; footer uses 169° → bg-linear-169 from-abricot to-mandarine). */
+/*
+ * "Degradé TCCE" — brand orange gradient, abricot (0%) → mandarine (100%).
+ * Default angle 100° (hero, TCCE sections). Override per use: `bg-gradient-tcce [--gradient-angle:169deg]` (footer).
+ */
 @utility bg-gradient-tcce {
-  background-image: linear-gradient(100deg, var(--color-abricot) 0%, var(--color-mandarine) 100%);
+  background-color: var(--color-mandarine); /* fallback + guarantees a solid colour behind text */
+  background-image: linear-gradient(
+    var(--gradient-angle, 100deg),
+    var(--color-abricot) 0%,
+    var(--color-mandarine) 100%
+  );
 }
 
 @layer base {
