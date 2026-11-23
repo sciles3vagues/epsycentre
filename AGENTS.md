@@ -103,7 +103,7 @@ Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:5
 
 - `src/components/ui/` holds the reusable building blocks (CTA, section, sheet/dialog, icon button…) — **check there before creating a component** (props are typed in each component's `Props`). Page sections go in `src/components/sections/`. Logos are in `src/assets/logo/` (`currentColor`, coloured with tokens).
 - **Rules**: markup only in `.astro`; behaviour in `src/scripts/*.ts` (one responsibility per file), loaded by a one-line `<script>` import. Tailwind first; CSS Modules (`Component.module.css`) only for what utilities can't express — no `<style>` blocks. Keep components DRY/KISS/SRP.
-- **Section invariants**: every full-width section declares `data-header-tone` (`clair` on orange/photo backgrounds, `mandarine` on light ones — `ui/Section.astro` sets it) and its `id` matches a nav href in `src/config/navigation.ts`. Otherwise the sticky header colour and the nav anchors break silently.
+- **Section invariants**: every full-width block (sections, hero, footer, page wrappers) declares its background with `data-section-bg="white|fond|gradient"` (`ui/Section.astro` sets it), and section `id`s match the nav hrefs in `src/config/navigation.ts`. The fixed header copies that background and picks its text tone from it (peach on gradient, mandarine otherwise) — a missing attribute breaks it silently.
 - **Modals**: reuse `ui/Sheet.astro` + `src/scripts/dialog.ts` (including for the booking modal). Page scroll lock while a modal is open is global (`global.css`).
 
 ## TypeScript & code style
