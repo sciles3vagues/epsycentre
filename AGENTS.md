@@ -58,9 +58,9 @@ Import from `src` with the `@/` alias (`@/components/Seo.astro`).
 
 - Default to `.astro` components. They render to HTML with zero client JS.
 - Use a React `.tsx` island **only** when state or interactivity is required. Choose the laziest directive that works: `client:visible` > `client:idle` > `client:load`. Use `client:only` only when SSR is impossible.
-- For small DOM behaviour (toggle, disclosure), prefer a `<script>` in the `.astro` component over shipping React.
+- For small DOM behaviour (toggle, disclosure), prefer a TS module in `src/scripts/` (loaded by a `<script>` in the component) over shipping React.
 - Images: use `<Image />` / `<Picture />` from `astro:assets` with explicit `width`/`height` and meaningful `alt`. Add `loading="eager"` + `fetchpriority="high"` only on the LCP image.
-- Fonts: self-host WOFF2 in `public/fonts/`, `font-display: swap`, preload only the critical one.
+- Fonts: self-hosted through the Astro Fonts API (`astro.config.mjs` → `fonts`), `font-display: swap`, preload only the critical weights.
 - No third-party scripts without discussion (analytics etc. must load after interaction or idle, and be consent-compliant under GDPR/CNIL).
 - Prefetch is on (`prefetchAll`, hover). Don't add a client router unless asked.
 
@@ -94,15 +94,17 @@ Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:5
 
 - **Colors**: `primary-50` (= `texte-clair`), `secondary`, `tertiary`, `mandarine`, `abricot`, `noir`, `fond` → `bg-fond`, `text-noir`, `border-tertiary`…
 - **Contrast (pending designer review)**: `secondary`, `mandarine`, `primary-50` on light/orange backgrounds and `tertiary` for small text **fail WCAG AA**. For now, **develop with the designer colors as in Figma** — do NOT use the `*-strong` variants in components (they stay defined in `global.css` for the upcoming decision). Flag new low-contrast combinations in your summary instead of fixing them silently.
-- **Fonts**: `font-heading` (Manrope 500/700), `font-sans` (Inter 400/600/700), self-hosted via Astro Fonts API (`astro.config.mjs` → `fonts`, `<Font />` in Layout). Adding a weight = add it to `weights` there.
+- **Note**: axe (tests and DevTools) and Lighthouse cannot measure contrast on gradient/image backgrounds — check those combinations manually.
+- **Fonts**: `font-heading` (Manrope, variable 400–700), `font-sans` (Inter 400/600/700), self-hosted via Astro Fonts API (`astro.config.mjs` → `fonts`, `<Font />` in Layout). Adding a weight = add it to `weights` there.
 - **Text styles**: `typo-titre` (48/50 bold), `typo-grand` (36/40 bold), `typo-bouton` (24/28 medium), `typo-nom` (24/26 semibold), `typo-corps` (20/26, body default), `typo-petit` (16/20).
 - **Other**: `bg-gradient-tcce` (orange gradient), radii `rounded-card` (30px), `rounded-box` (20px), `rounded-pill` (40px).
-- **Logos** (`src/assets/logo/`, `fill="currentColor"` → colour with tokens): `logo-epsycentre.svg` (symbol + brand name, 400×49) and `logo-symbole.svg` (symbol only, 49×49). Import as components: `import Logo from "@/assets/logo/logo-epsycentre.svg"`. Brand colours: `text-mandarine` on light backgrounds, `text-texte-clair` on the hero photo and orange gradient. In a home link: `<a href="/" aria-label="Epsycentre, accueil"><Logo aria-hidden="true" /></a>`; standalone: `<Logo role="img" aria-label="Epsycentre" />`. Favicons in `public/` are generated from the symbol.
-- **UI components** (`src/components/ui/`): `Cta.astro` = Figma "Boutons" — `<Cta href={SITE.bookingUrl} tone="clair|secondary|tertiary|mandarine" variant="outline|solid">Prendre RDV</Cta>` (outline fills on hover/focus; renders `<a>` with `href`, else `<button>`). Page sections live in `src/components/sections/` (`Hero.astro`).
-- **Component rules**: markup only in `.astro`; behaviour goes in `src/scripts/*.ts` (one responsibility per file) and is loaded with `<script>import { initX } from '@/scripts/…'; initX();</script>`. Styles: Tailwind first; CSS Modules (`Component.module.css`) only for what utilities can't express cleanly — no `<style>` blocks. Keep components DRY/KISS/SRP.
-- **Dialogs**: `ui/Sheet.astro` (full-screen native `<dialog>` + `Sheet.module.css` slide animation) driven by `src/scripts/dialog.ts` via data attributes (`data-dialog-open="id"`, `data-dialog-close`, `data-dialog-focus`). Page scroll is locked globally while any modal is open (`global.css`). Reuse it for the booking modal. `ui/IconButton.astro` for icon-only buttons (`label` = accessible name).
-- **Header** (`src/components/header/`, included by `Layout`): `Header.astro` (state; behaviour in `src/scripts/header/`) wraps `HeaderDesktop.astro` (xl+) and `HeaderMobile.astro` (< xl, menu in a `Sheet`). Shared pieces: `NavLink.astro` (bold-hover link), `HomeLink.astro` (logo link). Links come from `src/config/navigation.ts`. **Every full-width section must declare `data-header-tone`**: `"clair"` on orange/photo backgrounds, `"mandarine"` on light ones — the fixed header takes the colour of the section under it. Section `id`s must match the nav hrefs (`notre-centre`, `equipe`, `tcce`, `groupes`, `acces`, `faq`).
-- **Note**: axe (tests and DevTools) and Lighthouse cannot measure contrast on gradient/image backgrounds — check those combinations manually.
+
+## Components
+
+- `src/components/ui/` holds the reusable building blocks (CTA, section, sheet/dialog, icon button…) — **check there before creating a component** (props are typed in each component's `Props`). Page sections go in `src/components/sections/`. Logos are in `src/assets/logo/` (`currentColor`, coloured with tokens).
+- **Rules**: markup only in `.astro`; behaviour in `src/scripts/*.ts` (one responsibility per file), loaded by a one-line `<script>` import. Tailwind first; CSS Modules (`Component.module.css`) only for what utilities can't express — no `<style>` blocks. Keep components DRY/KISS/SRP.
+- **Section invariants**: every full-width section declares `data-header-tone` (`clair` on orange/photo backgrounds, `mandarine` on light ones — `ui/Section.astro` sets it) and its `id` matches a nav href in `src/config/navigation.ts`. Otherwise the sticky header colour and the nav anchors break silently.
+- **Modals**: reuse `ui/Sheet.astro` + `src/scripts/dialog.ts` (including for the booking modal). Page scroll lock while a modal is open is global (`global.css`).
 
 ## TypeScript & code style
 
@@ -113,7 +115,8 @@ Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:5
 - Explicit boolean checks in `.ts/.tsx` (`strict-boolean-expressions`): `items.length > 0`, not `items.length`.
 - Use early returns and guard clauses. Use `const` by default. Use `===` only.
 - Naming: components `PascalCase.astro/.tsx`, other files and folders `kebab-case`, variables/functions `camelCase`, true constants `SCREAMING_SNAKE_CASE`, booleans `isX/hasX/canX`, handlers `handleX`.
-- Styling: Tailwind utilities. Use `cn()` from `@/lib/cn` for conditional classes. Use component-scoped `<style>` only when utilities can't express it. Mobile-first.
+- Styling: Tailwind utilities. Use `cn()` from `@/lib/cn` for conditional classes. Mobile-first.
+- Comments: only when they explain something the code can't (a constraint, a workaround, a pending decision). No comments restating props or obvious code.
 
 ## React (when islands are introduced)
 
