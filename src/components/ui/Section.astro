@@ -3,6 +3,7 @@ import Cta from '@/components/ui/Cta.astro';
 import { SITE } from '@/config/site';
 import { cn } from '@/lib/cn';
 
+import type { Props as CtaProps } from '@/components/ui/Cta.astro';
 import type { SectionBackground } from '@/types/background';
 import type { Tone } from '@/types/tone';
 
@@ -13,10 +14,20 @@ interface Props {
   tone?: Tone;
   backgroundColor?: SectionBackground;
   hasCta?: boolean;
+  ctaVariant?: CtaProps['variant'];
   class?: string;
 }
 
-const { id, title, description, tone, backgroundColor = 'white', hasCta = true, class: className } = Astro.props;
+const {
+  id,
+  title,
+  description,
+  tone,
+  backgroundColor = 'white',
+  hasCta = true,
+  ctaVariant = 'outline',
+  class: className,
+} = Astro.props;
 
 const isGradient = backgroundColor === 'gradient';
 const resolvedTone: Tone = tone ?? (isGradient ? 'clair' : 'mandarine');
@@ -64,7 +75,7 @@ const TITLE_COLOR: Record<Tone, string> = {
   )}
 
   {hasCta && (
-    <Cta href={SITE.bookingUrl} tone={resolvedTone}>
+    <Cta href={SITE.bookingUrl} tone={resolvedTone} variant={ctaVariant}>
       Prendre RDV
     </Cta>
   )}

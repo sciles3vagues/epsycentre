@@ -31,10 +31,14 @@ const OUTLINE: Record<Tone, string> = {
 };
 
 const SOLID: Record<Tone, string> = {
-  clair: 'border-texte-clair bg-texte-clair text-mandarine',
-  secondary: 'border-secondary bg-secondary text-texte-clair',
-  tertiary: 'border-tertiary bg-tertiary text-texte-clair',
-  mandarine: 'border-mandarine bg-mandarine text-texte-clair',
+  clair:
+    'border-texte-clair bg-texte-clair text-mandarine hover:bg-transparent hover:text-texte-clair focus-visible:bg-transparent focus-visible:text-texte-clair',
+  secondary:
+    'border-secondary bg-secondary text-texte-clair hover:bg-transparent hover:text-secondary focus-visible:bg-transparent focus-visible:text-secondary',
+  tertiary:
+    'border-tertiary bg-tertiary text-texte-clair hover:bg-transparent hover:text-tertiary focus-visible:bg-transparent focus-visible:text-tertiary',
+  mandarine:
+    'border-mandarine bg-mandarine text-texte-clair hover:bg-transparent hover:text-mandarine focus-visible:bg-transparent focus-visible:text-mandarine',
 };
 
 const classes = cn(
