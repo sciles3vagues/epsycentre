@@ -1,7 +1,7 @@
 ---
 import AccordionItem from '@/components/ui/AccordionItem.astro';
 import Section from '@/components/ui/Section.astro';
-import { FAQ } from '@/config/faq';
+import { FAQ, paragraphText } from '@/config/faq';
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -9,7 +9,7 @@ const faqSchema = {
   mainEntity: FAQ.map(({ question, answer }) => ({
     '@type': 'Question',
     name: question,
-    acceptedAnswer: { '@type': 'Answer', text: answer.join(' ') },
+    acceptedAnswer: { '@type': 'Answer', text: answer.map(paragraphText).join(' ') },
   })),
 };
 ---
@@ -20,7 +20,19 @@ const faqSchema = {
       <li class="border-b border-mandarine pb-2">
         <AccordionItem question={question}>
           {answer.map(paragraph => (
-            <p>{paragraph}</p>
+            <p>
+              {typeof paragraph === 'string'
+                ? paragraph
+                : paragraph.map(part =>
+                    typeof part === 'string' ? (
+                      part
+                    ) : (
+                      <a href={part.href} class="font-semibold underline underline-offset-4">
+                        {part.text}
+                      </a>
+                    )
+                  )}
+            </p>
           ))}
         </AccordionItem>
       </li>

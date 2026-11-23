@@ -1,8 +1,19 @@
+export interface FaqLink {
+  text: string;
+  href: string;
+}
+
+export type FaqParagraph = string | (string | FaqLink)[];
+
 export interface FaqEntry {
   question: string;
-  /** One string per paragraph. */
-  answer: string[];
+  answer: FaqParagraph[];
 }
+
+export const paragraphText = (paragraph: FaqParagraph): string =>
+  typeof paragraph === 'string'
+    ? paragraph
+    : paragraph.map(part => (typeof part === 'string' ? part : part.text)).join('');
 
 export const FAQ: FaqEntry[] = [
   {
@@ -55,8 +66,16 @@ export const FAQ: FaqEntry[] = [
     question: 'En cas d’urgence',
     answer: [
       'Le cabinet n’est pas un service d’urgence et ne peut pas assurer de permanence en dehors des rendez-vous. Si vous traversez une situation de crise, n’attendez pas votre prochaine séance.',
-      'Pour toute urgence, contactez le 15 (SAMU) ou rendez-vous aux urgences les plus proches.',
-      'En cas d’idées suicidaires, vous pouvez appeler le 3114, numéro national de prévention du suicide, gratuit et accessible 24h/24 et 7j/7.',
+      [
+        'Pour toute urgence, contactez le ',
+        { text: '15 (SAMU)', href: 'tel:15' },
+        ' ou rendez-vous aux urgences les plus proches.',
+      ],
+      [
+        'En cas d’idées suicidaires, vous pouvez appeler le ',
+        { text: '3114', href: 'tel:3114' },
+        ', numéro national de prévention du suicide, gratuit et accessible 24h/24 et 7j/7.',
+      ],
     ],
   },
 ];
