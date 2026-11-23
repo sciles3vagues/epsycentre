@@ -3,16 +3,15 @@ import Cta from '@/components/ui/Cta.astro';
 import { SITE } from '@/config/site';
 import { cn } from '@/lib/cn';
 
+import type { SectionBackground } from '@/types/background';
 import type { Tone } from '@/types/tone';
-
-type BackgroundColor = 'white' | 'fond' | 'gradient';
 
 interface Props {
   id: string;
   title: string;
   description?: string;
   tone?: Tone;
-  backgroundColor?: BackgroundColor;
+  backgroundColor?: SectionBackground;
   hasCta?: boolean;
   class?: string;
 }
@@ -23,7 +22,7 @@ const isGradient = backgroundColor === 'gradient';
 const resolvedTone: Tone = tone ?? (isGradient ? 'clair' : 'mandarine');
 const titleId = `${id}-titre`;
 
-const BACKGROUND: Record<BackgroundColor, string> = {
+const BACKGROUND: Record<SectionBackground, string> = {
   white: 'bg-white',
   fond: 'bg-fond',
   gradient: 'bg-gradient-tcce',
@@ -40,7 +39,7 @@ const TITLE_COLOR: Record<Tone, string> = {
 <section
   id={id}
   aria-labelledby={titleId}
-  data-header-tone={isGradient ? 'clair' : 'mandarine'}
+  data-section-bg={backgroundColor}
   class={cn(
     'flex flex-col items-center gap-12.5 px-5 py-12.5 md:gap-25 md:px-12.5 md:py-25',
     BACKGROUND[backgroundColor],

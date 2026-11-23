@@ -1,6 +1,6 @@
 import { onScrollFrame } from '@/lib/on-scroll-frame';
-import { updateHeaderTone } from '@/scripts/header/header-tone';
-import { updateStickyState } from '@/scripts/header/sticky-header';
+import { updateHeaderTheme } from '@/scripts/header/header-theme';
+import { updateScrollState } from '@/scripts/header/scroll-state';
 
 export function initHeader(): void {
   const header = document.querySelector<HTMLElement>('[data-site-header]');
@@ -9,7 +9,7 @@ export function initHeader(): void {
   }
 
   onScrollFrame(() => {
-    updateStickyState(header);
-    updateHeaderTone(header);
+    updateScrollState(header);
+    updateHeaderTheme(header);
   });
 }

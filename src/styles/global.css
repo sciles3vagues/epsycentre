@@ -56,23 +56,11 @@
   --radius-box: 1.25rem;
   --radius-pill: 2.5rem;
 
-  --animate-header-in: header-in 350ms ease;
   --animate-marquee: marquee 40s linear infinite;
 
   @keyframes marquee {
     to {
       transform: translateX(-50%);
-    }
-  }
-
-  @keyframes header-in {
-    from {
-      transform: translateY(-2rem);
-      opacity: 0.9;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
     }
   }
 }

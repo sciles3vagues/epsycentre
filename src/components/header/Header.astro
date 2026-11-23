@@ -3,15 +3,26 @@ import HeaderDesktop from '@/components/header/HeaderDesktop.astro';
 import HeaderMobile from '@/components/header/HeaderMobile.astro';
 
 // TODO: finish this and review when other sections ready
-/** Children react to `data-sticky` / `data-tone` (set by src/scripts/header/) through `group-data-*` variants. */
+/** Children react to `data-scrolled` / `data-tone` / `data-bg` (set by src/scripts/header/) through `group-data-*` variants. */
 ---
 
 <header
   data-site-header
-  data-sticky="false"
+  data-scrolled="false"
   data-tone="clair"
-  class="group/header absolute inset-x-0 top-0 z-50 text-texte-clair data-[sticky=true]:fixed data-[tone=mandarine]:text-mandarine motion-safe:transition-colors motion-safe:duration-300 motion-safe:data-[sticky=true]:animate-header-in"
+  data-bg="gradient"
+  class="group/header fixed inset-x-0 top-0 z-50 isolate text-texte-clair transition-colors duration-500 ease-in-out data-[tone=mandarine]:text-mandarine"
 >
+  <!-- One layer per section background, crossfaded with opacity (a gradient can't transition otherwise). -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 -z-10 opacity-0 shadow-md transition-opacity duration-500 ease-in-out group-data-[scrolled=true]/header:opacity-100"
+  >
+    <div class="absolute inset-0 bg-white opacity-0 transition-opacity duration-500 ease-in-out group-data-[bg=white]/header:opacity-100"></div>
+    <div class="absolute inset-0 bg-fond opacity-0 transition-opacity duration-500 ease-in-out group-data-[bg=fond]/header:opacity-100"></div>
+    <div class="absolute inset-0 bg-gradient-tcce opacity-0 transition-opacity duration-500 ease-in-out group-data-[bg=gradient]/header:opacity-100"></div>
+  </div>
+
   <HeaderDesktop />
   <HeaderMobile />
 </header>
