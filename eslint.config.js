@@ -66,6 +66,13 @@ export default defineConfig(
 
   astro.configs.recommended,
   astro.configs['jsx-a11y-strict'],
+  {
+    files: ['**/*.astro'],
+    rules: {
+      // Scrollable regions (carousels) must be keyboard-focusable (WCAG 2.1.1).
+      'astro/jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel', 'region'], tags: [] }],
+    },
+  },
 
   // Must stay last: disables stylistic rules that conflict with Prettier
   eslintConfigPrettier
