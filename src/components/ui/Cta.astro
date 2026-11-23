@@ -1,13 +1,9 @@
 ---
 import { cn } from '@/lib/cn';
 
+import type { Tone } from '@/types/tone';
 import type { HTMLAttributes } from 'astro/types';
 
-/**
- * Call-to-action pill
- * Renders an `<a>` when `href` is given, otherwise a `<button type="button">`.
- */
-type Tone = 'clair' | 'secondary' | 'tertiary' | 'mandarine';
 type Variant = 'outline' | 'solid';
 
 interface BaseProps {
@@ -23,7 +19,6 @@ export type Props = LinkProps | ButtonProps;
 
 const { tone = 'clair', variant = 'outline', class: className, ...rest } = Astro.props;
 
-// Full class strings (no interpolation) so Tailwind can detect them.
 const OUTLINE: Record<Tone, string> = {
   clair:
     'border-texte-clair text-texte-clair hover:bg-texte-clair hover:text-mandarine focus-visible:bg-texte-clair focus-visible:text-mandarine',
