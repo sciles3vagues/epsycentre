@@ -93,10 +93,10 @@ Import from `src` with the `@/` alias (`@/components/Seo.astro`).
 Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:547`). All tokens live in `src/styles/global.css` — never hardcode hex values or px font sizes.
 
 - **Colors**: `primary-50` (= `texte-clair`), `secondary`, `tertiary`, `mandarine`, `abricot`, `noir`, `fond` → `bg-fond`, `text-noir`, `border-tertiary`…
-- **Contrast (pending designer review)**: `secondary`, `mandarine`, `primary-50` on light/orange backgrounds and `tertiary` for small text **fail WCAG AA**. For now, **develop with the designer colors as in Figma** — do NOT use the `*-strong` variants in components (they stay defined in `global.css` for the upcoming decision). Flag new low-contrast combinations in your summary instead of fixing them silently.
+- **Contrast (pending designer review)**: `secondary`, `mandarine`, `primary-50` on light/orange backgrounds and `tertiary` for small text **fail WCAG AA**. For now, **develop with the designer colors as in Figma** — do NOT use the `*-strong` variants in components (they stay defined in `global.css` for the upcoming decision). Flag new low-contrast combinations in your summary instead of fixing them silently. The axe `color-contrast` rule is disabled in `tests/a11y.spec.ts` until then — re-enable it with the fix.
 - **Note**: axe (tests and DevTools) and Lighthouse cannot measure contrast on gradient/image backgrounds — check those combinations manually.
 - **Fonts**: `font-heading` (Manrope, variable 400–700), `font-sans` (Inter 400/600/700), self-hosted via Astro Fonts API (`astro.config.mjs` → `fonts`, `<Font />` in Layout). Adding a weight = add it to `weights` there.
-- **Text styles**: `typo-titre` (48/50 bold), `typo-grand` (36/40 bold), `typo-bouton` (24/28 medium), `typo-nom` (24/26 semibold), `typo-corps` (20/26, body default), `typo-petit` (16/20).
+- **Text styles**: `typo-titre` (48/50 bold), `typo-grand` (36/40 bold), `typo-bouton` (24/28 medium), `typo-nom` (24/26 semibold), `typo-corps` (20/26, body default), `typo-petit` (16/20). Mobile (< md): `text-titre-mobile` (34/36, section titles), `text-hero-mobile` (24/28), `text-corps-mobile` (18/20), `text-bouton-mobile` (16/16).
 - **Other**: `bg-gradient-tcce` (orange gradient), radii `rounded-card` (30px), `rounded-box` (20px), `rounded-pill` (40px).
 
 ## Components
