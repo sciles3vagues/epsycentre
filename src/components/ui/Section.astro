@@ -10,13 +10,14 @@ type BackgroundColor = 'white' | 'fond' | 'gradient';
 interface Props {
   id: string;
   title: string;
+  description?: string;
   tone?: Tone;
   backgroundColor?: BackgroundColor;
   hasCta?: boolean;
   class?: string;
 }
 
-const { id, title, tone, backgroundColor = 'white', hasCta = true, class: className } = Astro.props;
+const { id, title, description, tone, backgroundColor = 'white', hasCta = true, class: className } = Astro.props;
 
 const isGradient = backgroundColor === 'gradient';
 const resolvedTone: Tone = tone ?? (isGradient ? 'clair' : 'mandarine');
@@ -40,11 +41,22 @@ const TITLE_COLOR: Record<Tone, string> = {
   id={id}
   aria-labelledby={titleId}
   data-header-tone={isGradient ? 'clair' : 'mandarine'}
-  class={cn('flex flex-col items-center gap-25 px-12.5 py-25', BACKGROUND[backgroundColor], className)}
+  class={cn(
+    'flex flex-col items-center gap-12.5 px-5 py-12.5 md:gap-25 md:px-12.5 md:py-25',
+    BACKGROUND[backgroundColor],
+    className
+  )}
 >
-  <h2 id={titleId} class={cn('text-center font-heading text-titre-mobile md:typo-titre', TITLE_COLOR[resolvedTone])}>
-    {title}
-  </h2>
+  <div class="flex flex-col items-center gap-3 text-center md:gap-5.75">
+    <h2 id={titleId} class={cn('font-heading text-titre-mobile uppercase md:typo-titre', TITLE_COLOR[resolvedTone])}>
+      {title}
+    </h2>
+    {description !== undefined && (
+      <p class={cn('max-w-222.5 text-corps-mobile md:text-corps', isGradient ? 'text-texte-clair' : 'text-noir')}>
+        {description}
+      </p>
+    )}
+  </div>
 
   {Astro.slots.has('default') && (
     <div class="w-full">

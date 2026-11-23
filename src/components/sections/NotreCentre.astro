@@ -1,0 +1,28 @@
+---
+import accueil from '@/assets/images/notre-centre/accueil.jpg';
+import devanture from '@/assets/images/notre-centre/devanture.jpg';
+import espaceAttente from '@/assets/images/notre-centre/espace-attente.jpg';
+import salleLumineuse from '@/assets/images/notre-centre/salle-lumineuse.jpg';
+import Carousel from '@/components/ui/Carousel.astro';
+import Section from '@/components/ui/Section.astro';
+
+const PHOTOS = [
+  {
+    src: devanture,
+    alt: 'Façade du centre Epsycentre à Biarritz : « Thérapies comportementales et cognitives », ouvert de 8h à 20h, le dimanche de 9h à 13h.',
+  },
+  // TODO: placeholder photos from the design ("Image à changer") — replace with real photos and add their alt text.
+  { src: accueil, alt: '' },
+  { src: espaceAttente, alt: '' },
+  { src: salleLumineuse, alt: '' },
+];
+---
+
+<Section
+  id="notre-centre"
+  title="Notre centre"
+  description="Né d’une volonté commune, notre centre réunit des professionnels engagés autour d’une approche innovante, humaine et chaleureuse, fondée sur les TCCE."
+  tone="secondary"
+>
+  <Carousel images={PHOTOS} label="Photos du centre" />
+</Section>

@@ -24,9 +24,12 @@
   --text-titre: 3rem;
   --text-titre--line-height: 3.125rem;
   --text-titre--font-weight: 700;
-  --text-titre-mobile: 1.5rem;
-  --text-titre-mobile--line-height: 1.75rem;
+  --text-titre-mobile: 2.125rem;
+  --text-titre-mobile--line-height: 2.25rem;
   --text-titre-mobile--font-weight: 700;
+  --text-hero-mobile: 1.5rem;
+  --text-hero-mobile--line-height: 1.75rem;
+  --text-hero-mobile--font-weight: 700;
   --text-grand: 2.25rem;
   --text-grand--line-height: 2.5rem;
   --text-grand--font-weight: 700;
@@ -42,6 +45,9 @@
   --text-corps: 1.25rem;
   --text-corps--line-height: 1.625rem;
   --text-corps--font-weight: 400;
+  --text-corps-mobile: 1.125rem;
+  --text-corps-mobile--line-height: 1.25rem;
+  --text-corps-mobile--font-weight: 400;
   --text-petit: 1rem;
   --text-petit--line-height: 1.25rem;
   --text-petit--font-weight: 400;
@@ -51,6 +57,13 @@
   --radius-pill: 2.5rem;
 
   --animate-header-in: header-in 350ms ease;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 
   @keyframes header-in {
     from {

@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+
+import PauseIcon from '@/assets/icons/pause.svg';
+import PlayIcon from '@/assets/icons/play.svg';
+import IconButton from '@/components/ui/IconButton.astro';
+import { cn } from '@/lib/cn';
+
+import type { ImageMetadata } from 'astro';
+
+interface CarouselImage {
+  src: ImageMetadata;
+  alt: string;
+}
+
+interface Props {
+  images: CarouselImage[];
+  label: string;
+  class?: string;
+}
+
+const { images, label, class: className } = Astro.props;
+
+const LABEL_PAUSE = 'Mettre en pause le défilement des photos';
+const LABEL_PLAY = 'Reprendre le défilement des photos';
+---
+
+<div data-carousel data-paused="false" class={cn('group/carousel relative', className)}>
+  <div
+    role="region"
+    aria-label={label}
+    tabindex="0"
+    class="snap-x snap-mandatory overflow-x-auto md:motion-safe:overflow-hidden"
+  >
+    <!-- Two identical lists: translating by -50% loops seamlessly; the copy is hidden from assistive tech. -->
+    <div class="flex w-max group-focus-within/carousel:[animation-play-state:paused] group-hover/carousel:[animation-play-state:paused] group-data-[paused=true]/carousel:[animation-play-state:paused] md:motion-safe:animate-marquee">
+      {[false, true].map(isCopy => (
+        <ul
+          class={cn('flex gap-3 pr-3', isCopy && 'hidden md:motion-safe:flex')}
+          aria-hidden={isCopy ? 'true' : undefined}
+        >
+          {images.map(({ src, alt }) => (
+            <li class="shrink-0 snap-start">
+              <Image
+                src={src}
+                alt={isCopy ? '' : alt}
+                widths={[225, 450, 438, 876]}
+                sizes="(min-width: 48rem) 438px, 225px"
+                class="h-37.5 w-56.25 rounded-card object-cover md:h-73 md:w-109.5"
+              />
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+
+  <IconButton
+    label={LABEL_PAUSE}
+    data-carousel-toggle
+    data-label-pause={LABEL_PAUSE}
+    data-label-play={LABEL_PLAY}
+    class="absolute right-3 bottom-3 m-0 hidden size-11 items-center justify-center rounded-full bg-white/85 text-noir md:motion-safe:flex"
+  >
+    <PauseIcon aria-hidden="true" focusable="false" class="size-6 group-data-[paused=true]/carousel:hidden" />
+    <PlayIcon aria-hidden="true" focusable="false" class="hidden size-6 group-data-[paused=true]/carousel:block" />
+  </IconButton>
+</div>
+
+<script>
+  import { initCarousels } from '@/scripts/carousel';
+
+  initCarousels();
+</script>
