@@ -1,9 +1,7 @@
 ---
 import LogoEpsycentre from '@/assets/logo/logo-epsycentre.svg';
+import AddressLink from '@/components/ui/AddressLink.astro';
 import HomeLink from '@/components/ui/HomeLink.astro';
-import { SITE } from '@/config/site';
-
-const { street, postalCode, city } = SITE.address;
 ---
 
 <footer
@@ -14,9 +12,7 @@ const { street, postalCode, city } = SITE.address;
     <LogoEpsycentre aria-hidden="true" focusable="false" class="h-auto w-84.25" />
   </HomeLink>
 
-  <address class="text-corps not-italic md:text-center">
-    {street}, {postalCode} {city}
-  </address>
+  <AddressLink class="text-corps md:text-center" />
 
   <a href="/mentions-legales" class="text-petit decoration-1 underline-offset-4 hover:underline">
     Mentions légales

@@ -20,6 +20,7 @@ const twMerge = extendTailwindMerge({
             'bouton',
             'bouton-mobile',
             'nom',
+            'nom-mobile',
             'corps',
             'corps-mobile',
             'petit',

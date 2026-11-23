@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+
+import devanture from '@/assets/images/notre-centre/devanture.jpg';
+import AddressLink from '@/components/ui/AddressLink.astro';
+import Section from '@/components/ui/Section.astro';
+
+type AccessInfo = { title: string; isAddress: true } | { title: string; items: string[] };
+
+const ACCESS_INFO: AccessInfo[] = [
+  { title: 'Adresse', isAddress: true },
+  {
+    title: 'Accès en bus',
+    items: [
+      'Lignes 5, 11, N5 (Guy Petit)',
+      'T1 (Mairie de Biarritz, à 10 min à pied)',
+      'Ligne 74 (Les Trois Fontaines / Jardin public)',
+    ],
+  },
+  {
+    title: 'Parking à proximité',
+    items: ['Gare du Midi (payant)', 'Floquet / Centre des finances publiques (gratuit)'],
+  },
+];
+---
+
+<Section id="acces" title="Accès" tone="tertiary" backgroundColor="fond">
+  <div class="flex flex-col gap-10 md:flex-row md:gap-28 md:py-20">
+    <!-- TODO: replace with the dedicated photo once provided ("Photo centre à fournir" in the design). -->
+    <div class="relative aspect-4/3 w-full overflow-hidden rounded-card md:aspect-auto md:flex-1">
+      <Image
+        src={devanture}
+        alt="Façade du centre Epsycentre, 5 Rue Guy Petit à Biarritz."
+        widths={[400, 800, 1039]}
+        sizes="(min-width: 48rem) 50vw, 100vw"
+        class="absolute inset-0 size-full object-cover"
+      />
+    </div>
+
+    <ul class="flex flex-col gap-5.25 md:flex-1">
+      {ACCESS_INFO.map(info => (
+        <li class="flex flex-col gap-2.5 rounded-box border border-tertiary p-6.25 text-tertiary">
+          <h3 class="font-sans text-nom-mobile md:text-nom">{info.title}</h3>
+          {'isAddress' in info ? (
+            <AddressLink class="text-corps-mobile md:text-corps" />
+          ) : (
+            <ul class="flex flex-col gap-1 text-corps-mobile md:text-corps">
+              {info.items.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>

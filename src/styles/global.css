@@ -42,6 +42,9 @@
   --text-nom: 1.5rem;
   --text-nom--line-height: 1.625rem;
   --text-nom--font-weight: 600;
+  --text-nom-mobile: 1.125rem;
+  --text-nom-mobile--line-height: 1.25rem;
+  --text-nom-mobile--font-weight: 600;
   --text-corps: 1.25rem;
   --text-corps--line-height: 1.625rem;
   --text-corps--font-weight: 400;
