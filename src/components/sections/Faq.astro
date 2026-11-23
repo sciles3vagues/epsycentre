@@ -1,0 +1,30 @@
+---
+import AccordionItem from '@/components/ui/AccordionItem.astro';
+import Section from '@/components/ui/Section.astro';
+import { FAQ } from '@/config/faq';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer.join(' ') },
+  })),
+};
+---
+
+<Section id="faq" title="Foire aux questions" tone="mandarine" hasCta={false}>
+  <ul class="mx-auto flex max-w-278.5 flex-col gap-2">
+    {FAQ.map(({ question, answer }) => (
+      <li class="border-b border-mandarine pb-2">
+        <AccordionItem question={question}>
+          {answer.map(paragraph => (
+            <p>{paragraph}</p>
+          ))}
+        </AccordionItem>
+      </li>
+    ))}
+  </ul>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+</Section>

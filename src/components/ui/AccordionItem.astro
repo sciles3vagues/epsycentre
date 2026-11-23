@@ -1,0 +1,33 @@
+---
+import MinusIcon from '@/assets/icons/minus.svg';
+import PlusIcon from '@/assets/icons/plus.svg';
+import { cn } from '@/lib/cn';
+
+import styles from './AccordionItem.module.css';
+
+interface Props {
+  question: string;
+  class?: string;
+}
+
+const { question, class: className } = Astro.props;
+---
+
+<details class={cn(styles.item, 'group/accordion', className)}>
+  <summary class="flex cursor-pointer list-none items-start gap-2.5 p-5 [&::-webkit-details-marker]:hidden">
+    <span class="flex-1 text-corps-mobile group-open/accordion:font-bold md:text-corps">{question}</span>
+    <PlusIcon
+      aria-hidden="true"
+      focusable="false"
+      class="size-6.5 shrink-0 text-mandarine group-open/accordion:hidden"
+    />
+    <MinusIcon
+      aria-hidden="true"
+      focusable="false"
+      class="hidden size-6.5 shrink-0 text-mandarine group-open/accordion:block"
+    />
+  </summary>
+  <div class="flex flex-col gap-2.5 px-5 pb-5 text-corps-mobile md:text-corps">
+    <slot />
+  </div>
+</details>
