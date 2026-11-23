@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 // Add every public route here (or generate the list from the sitemap as the site grows).
-const ROUTES = ['/'];
+const ROUTES = ['/', '/mentions-legales'];
 
 // WCAG 2.0/2.1/2.2 A + AA — the baseline RGAA 4.1 maps to.
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

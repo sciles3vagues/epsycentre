@@ -1,0 +1,38 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+// TODO: fill in the legal content (scaffold only).
+const SECTIONS = [
+  { id: 'editeur', title: 'Éditeur du site' },
+  { id: 'directeur-publication', title: 'Directeur de la publication' },
+  { id: 'hebergement', title: 'Hébergement' },
+  { id: 'propriete-intellectuelle', title: 'Propriété intellectuelle' },
+  { id: 'donnees-personnelles', title: 'Données personnelles' },
+  { id: 'cookies', title: 'Cookies' },
+  { id: 'credits', title: 'Crédits' },
+];
+---
+
+<Layout
+  title="Mentions légales"
+  description="Mentions légales du site Epsycentre, centre de thérapies cognitives, comportementales et émotionnelles à Biarritz."
+>
+  <article
+    data-header-tone="mandarine"
+    aria-labelledby="mentions-legales-titre"
+    class="mx-auto flex max-w-200 flex-col gap-12.5 px-5 pt-32 pb-12.5 md:px-12.5 md:pt-44 md:pb-25"
+  >
+    <h1 id="mentions-legales-titre" class="font-heading text-titre-mobile text-mandarine md:typo-titre">
+      Mentions légales
+    </h1>
+
+    {SECTIONS.map(({ id, title }) => (
+      <section aria-labelledby={id} class="flex flex-col gap-3">
+        <h2 id={id} class="font-heading text-bouton text-noir">
+          {title}
+        </h2>
+        <p class="text-corps-mobile md:text-corps">À compléter.</p>
+      </section>
+    ))}
+  </article>
+</Layout>
