@@ -1,0 +1,24 @@
+---
+import LogoEpsycentre from '@/assets/logo/logo-epsycentre.svg';
+import HomeLink from '@/components/ui/HomeLink.astro';
+import { SITE } from '@/config/site';
+
+const { street, postalCode, city } = SITE.address;
+---
+
+<footer
+  data-header-tone="clair"
+  class="flex flex-col items-center gap-10 bg-gradient-tcce p-10 text-center text-white [--gradient-angle:127deg] md:flex-row md:justify-between md:text-left md:[--gradient-angle:169deg]"
+>
+  <HomeLink class="py-2.25">
+    <LogoEpsycentre aria-hidden="true" focusable="false" class="h-auto w-84.25" />
+  </HomeLink>
+
+  <address class="text-corps not-italic md:text-center">
+    {street}, {postalCode} {city}
+  </address>
+
+  <a href="/mentions-legales" class="text-petit decoration-1 underline-offset-4 hover:underline">
+    Mentions légales
+  </a>
+</footer>

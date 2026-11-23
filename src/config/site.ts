@@ -6,4 +6,9 @@ export const SITE = {
   defaultOgImage: '/og-default.png',
   // TODO: replace with the real booking URL (e.g. Doctolib) once provided.
   bookingUrl: '#acces',
+  address: {
+    street: '5 Rue Guy Petit',
+    postalCode: '64200',
+    city: 'Biarritz',
+  },
 } as const;
