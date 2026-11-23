@@ -5,16 +5,9 @@ import styles from './Sheet.module.css';
 
 import type { HTMLAttributes } from 'astro/types';
 
-/**
- * Full-screen modal sheet on a native <dialog> (behaviour: src/scripts/dialog.ts).
- * Open it with a trigger carrying `data-dialog-open={id}`; mark the close control with `data-dialog-close`
- * and the element to focus on open with `data-dialog-focus`.
- */
 interface Props extends Omit<HTMLAttributes<'dialog'>, 'id' | 'class'> {
   id: string;
-  /** Accessible name of the dialog. */
   label: string;
-  /** Media query that closes the sheet when it starts matching (e.g. switching to the desktop layout). */
   closeAt?: string;
   class?: string;
 }

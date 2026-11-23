@@ -4,25 +4,20 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, fontProviders } from 'astro/config';
 
-// Canonical production URL — required for sitemap, canonical links and Open Graph.
-// Override per environment with SITE_URL (see .env.example).
+// Required for sitemap, canonical and Open Graph URLs (see .env.example).
 const SITE_URL = process.env.SITE_URL ?? 'http://localhost:4321';
 
-// https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
   trailingSlash: 'never',
-  // Prefetch internal links on hover/focus for instant navigations, zero JS cost until interaction.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   integrations: [react(), sitemap()],
-  // Self-hosted at build time (no runtime request to a third party → faster + GDPR-friendly),
-  // with metric-matched fallbacks to minimise layout shift. Weights match the Figma text styles.
   fonts: [
     {
       provider: fontProviders.fontsource(),
       name: 'Manrope',
       cssVariable: '--font-manrope',
-      // Variable font (one file for the whole range): lets font-weight animate smoothly (nav hover 500 → 700).
+      // Variable font so font-weight can animate (nav hover).
       weights: ['400 700'],
       styles: ['normal'],
       subsets: ['latin'],
@@ -41,7 +36,6 @@ export default defineConfig({
     },
   ],
   build: {
-    // Inline small stylesheets to avoid render-blocking requests.
     inlineStylesheets: 'auto',
   },
   vite: {

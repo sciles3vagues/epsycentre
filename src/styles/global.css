@@ -1,74 +1,56 @@
 @import 'tailwindcss';
 
-/* Font families are injected by Astro's Fonts API (astro.config.mjs → fonts, <Font /> in Layout). */
+/* --font-manrope / --font-inter are injected by Astro's Fonts API. */
 @theme inline {
   --font-heading: var(--font-manrope);
   --font-sans: var(--font-inter);
 }
 
 @theme {
-  /* ---------- Colors (Figma variables) ---------- */
-  --color-primary-50: #ffeee5; /* "Primary 50" — alias "Texte clair" */
+  --color-primary-50: #ffeee5;
   --color-texte-clair: var(--color-primary-50);
-  --color-secondary: #1de4c3; /* "Secondary" — turquoise */
-  --color-tertiary: #2f7ce6; /* "Tertiary" — blue */
-  --color-mandarine: #f47d4a; /* "Mandarine" — gradient end */
-  --color-abricot: #f4a04a; /* gradient start ("Degradé TCCE") */
-  --color-noir: #121212; /* "Noir" — body text */
-  --color-fond: #fbf9f5; /* "Fond" — alternate section background */
+  --color-secondary: #1de4c3;
+  --color-tertiary: #2f7ce6;
+  --color-mandarine: #f47d4a;
+  --color-abricot: #f4a04a;
+  --color-noir: #121212;
+  --color-fond: #fbf9f5;
 
-  /*
-   * ---------- Accessible text variants (NOT in Figma — to validate with the designer) ----------
-   * secondary / mandarine / primary-50 don't reach WCAG contrast on light or orange backgrounds.
-   * Same hue, darkened to ≥ 4.5:1 on --color-fond (and white).
-   * ON HOLD: do not use in components yet — the team develops with the designer colors and will
-   * decide on contrast fixes with the designer later.
-   */
-  --color-secondary-strong: #10816e; /* 4.55:1 on fond */
-  --color-tertiary-strong: #2b71d2; /* 4.54:1 on fond (tertiary itself is 3.88:1 → large text only) */
-  --color-mandarine-strong: #b25b36; /* 4.50:1 on fond */
+  /* Not in Figma — WCAG AA text variants (≥ 4.5:1 on fond). ON HOLD: don't use until the designer decides. */
+  --color-secondary-strong: #10816e;
+  --color-tertiary-strong: #2b71d2;
+  --color-mandarine-strong: #b25b36;
 
-  /* ---------- Typography (Figma text styles, desktop) ---------- */
-  /* "Titre" — Manrope Bold 48/50 */
   --text-titre: 3rem;
   --text-titre--line-height: 3.125rem;
   --text-titre--font-weight: 700;
-  /* Titre on mobile (Figma mobile hero) — Manrope Bold 24/28 */
   --text-titre-mobile: 1.5rem;
   --text-titre-mobile--line-height: 1.75rem;
   --text-titre-mobile--font-weight: 700;
-  /* "Grand texte" — Manrope Bold 36/40 */
   --text-grand: 2.25rem;
   --text-grand--line-height: 2.5rem;
   --text-grand--font-weight: 700;
-  /* Buttons & menu — Manrope Medium 24/28 */
   --text-bouton: 1.5rem;
   --text-bouton--line-height: 1.75rem;
   --text-bouton--font-weight: 500;
-  /* Buttons on mobile ("Boutons mobile") — Manrope Regular 16/16 */
   --text-bouton-mobile: 1rem;
   --text-bouton-mobile--line-height: 1rem;
   --text-bouton-mobile--font-weight: 400;
-  /* "Nom membre équipe" — Inter Semi Bold 24/26 */
   --text-nom: 1.5rem;
   --text-nom--line-height: 1.625rem;
   --text-nom--font-weight: 600;
-  /* "Texte" — Inter Regular 20/26 */
   --text-corps: 1.25rem;
   --text-corps--line-height: 1.625rem;
   --text-corps--font-weight: 400;
-  /* "Description membre equipe" — Inter Regular 16/20 */
   --text-petit: 1rem;
   --text-petit--line-height: 1.25rem;
   --text-petit--font-weight: 400;
 
-  /* ---------- Radii (recurring in the design) ---------- */
-  --radius-card: 1.875rem; /* 30px — cards, images, group pills */
-  --radius-box: 1.25rem; /* 20px — info boxes */
-  --radius-pill: 2.5rem; /* 40px — buttons */
+  --radius-card: 1.875rem;
+  --radius-box: 1.25rem;
+  --radius-pill: 2.5rem;
 
-  /* ---------- Motion ---------- */
-  --animate-header-in: header-in 350ms ease; /* fixed header slide-in (always used with motion-safe:) */
+  --animate-header-in: header-in 350ms ease;
 
   @keyframes header-in {
     from {
@@ -82,7 +64,6 @@
   }
 }
 
-/* ---------- Composite text styles (family + size + line-height + weight) ---------- */
 @utility typo-titre {
   @apply font-heading text-titre;
 }
@@ -102,12 +83,9 @@
   @apply font-sans text-petit;
 }
 
-/*
- * "Degradé TCCE" — brand orange gradient, abricot (0%) → mandarine (100%).
- * Default angle 100° (hero, TCCE sections). Override per use: `bg-gradient-tcce [--gradient-angle:169deg]` (footer).
- */
+/* Angle override: `bg-gradient-tcce [--gradient-angle:169deg]` (footer). */
 @utility bg-gradient-tcce {
-  background-color: var(--color-mandarine); /* fallback + guarantees a solid colour behind text */
+  background-color: var(--color-mandarine);
   background-image: linear-gradient(
     var(--gradient-angle, 100deg),
     var(--color-abricot) 0%,
@@ -117,10 +95,9 @@
 
 @layer base {
   html {
-    /* Respect user font-size settings (RGAA 10.4 / WCAG 1.4.4): never set a px root size. */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* Keep anchor targets and focused elements clear of the fixed header (WCAG 2.4.11). */
+    /* Keeps anchor targets and focused elements clear of the fixed header (WCAG 2.4.11). */
     scroll-padding-top: 4.5rem;
 
     @variant xl {
@@ -132,7 +109,6 @@
     }
   }
 
-  /* Lock page scroll while any modal dialog is open (mobile menu, future booking modal…). */
   html:has(dialog:modal) {
     overflow: hidden;
   }
@@ -148,12 +124,10 @@
     @apply font-heading;
   }
 
-  /* Visible focus indicator for keyboard users (WCAG 2.4.7 / 2.4.11, RGAA 10.7). */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-current;
   }
 
-  /* Respect reduced-motion preferences (WCAG 2.3.3). */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

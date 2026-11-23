@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-/** Desktop header is shown from xl (1280px); below that, the mobile header with the burger menu. */
 const isDesktop = (width: number): boolean => width >= 1280;
 
 test.describe('header', () => {

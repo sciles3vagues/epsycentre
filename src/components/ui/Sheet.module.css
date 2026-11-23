@@ -1,4 +1,3 @@
-/* Full-screen sheet sliding in from the right. Exit animation relies on allow-discrete (display/overlay). */
 .sheet {
   translate: 100% 0;
 }

@@ -1,10 +1,9 @@
 /**
- * Behaviour for native modal dialogs (`<dialog data-dialog>`), driven by data attributes:
- * - `data-dialog-open="<dialog id>"` on a trigger opens it with `showModal()`; `aria-expanded` is kept in sync.
- * - `data-dialog-close` elements and links inside the dialog close it (links then navigate normally).
- * - `data-dialog-focus` marks the element focused on open (otherwise the browser picks the first focusable one).
- * - `data-dialog-close-at="<media query>"` on the dialog closes it when the query starts matching.
- * Focus trap, Escape to close, inert page and focus return to the trigger are provided by the browser.
+ * `<dialog data-dialog>` API:
+ * - `data-dialog-open="<id>"` on a trigger (aria-expanded kept in sync)
+ * - `data-dialog-close` and links inside close it
+ * - `data-dialog-focus` = element focused on open
+ * - `data-dialog-close-at="<media query>"` closes it when the query matches
  */
 export function initDialogs(): void {
   for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog[data-dialog]')) {

@@ -1,4 +1,3 @@
-/** Site-wide metadata used for SEO, Open Graph, structured data and llms.txt. */
 export const SITE = {
   name: 'Epsycentre',
   locale: 'fr_FR',

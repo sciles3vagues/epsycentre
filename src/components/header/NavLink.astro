@@ -1,11 +1,7 @@
 ---
 import { cn } from '@/lib/cn';
 
-/**
- * Navigation link — Manrope Medium → Bold on hover/focus (300ms ease-in-out, off with reduced motion).
- * The invisible bold copy reserves the bold width so neighbours never shift; it is aria-hidden,
- * so the accessible name stays the label once.
- */
+/** The invisible aria-hidden bold copy reserves the bold width, so hovering never shifts neighbouring links. */
 interface Props {
   href: string;
   label: string;

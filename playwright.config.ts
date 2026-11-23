@@ -16,7 +16,6 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
   ],
-  // Tests run against the production build to match what users get.
   webServer: {
     // --ignore-lock: one-off foreground server (Astro auto-backgrounds preview when it detects an AI agent,
     // which makes Playwright think the server exited and leaves an orphan process behind).

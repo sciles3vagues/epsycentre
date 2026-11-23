@@ -1,7 +1,4 @@
-/**
- * Runs `callback` immediately, then at most once per animation frame on scroll and resize.
- * Returns a function that removes the listeners.
- */
+/** Runs `callback` now, then at most once per frame on scroll/resize. Returns an unsubscribe function. */
 export function onScrollFrame(callback: () => void): () => void {
   let isTicking = false;
 

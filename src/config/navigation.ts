@@ -1,7 +1,5 @@
-/** Main navigation — shared by the desktop and mobile headers (and later the footer). */
 export interface NavLink {
   label: string;
-  /** Longer label used in the mobile menu when it differs (Figma "Menu hamburger ouvert"). */
   mobileLabel?: string;
   href: string;
 }

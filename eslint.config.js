@@ -11,7 +11,6 @@ import tseslint from 'typescript-eslint';
 export default defineConfig(
   globalIgnores(['dist/', '.astro/', 'node_modules/', 'playwright-report/', 'test-results/', 'public/']),
 
-  // Base: JS + TypeScript (all files)
   eslint.configs.recommended,
   tseslint.configs.recommended,
   {
@@ -36,7 +35,6 @@ export default defineConfig(
     },
   },
 
-  // Type-aware rules for TS/TSX source files
   {
     files: ['**/*.{ts,tsx}'],
     extends: [tseslint.configs.recommendedTypeChecked],
@@ -49,7 +47,6 @@ export default defineConfig(
     },
   },
 
-  // React components (.tsx) — hooks + strict a11y
   {
     files: ['**/*.tsx'],
     extends: [
@@ -67,7 +64,6 @@ export default defineConfig(
     },
   },
 
-  // Astro components — recommended + strict a11y (WCAG/RGAA)
   astro.configs.recommended,
   astro.configs['jsx-a11y-strict'],
 
