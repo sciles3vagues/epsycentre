@@ -1,0 +1,10 @@
+.pill {
+  composes: item from '../ui/AccordionItem.module.css';
+}
+
+@media (hover: hover) {
+  .pill:hover::details-content {
+    block-size: auto;
+    content-visibility: visible;
+  }
+}
