@@ -1,0 +1,45 @@
+---
+import CloseIcon from '@/assets/icons/close.svg';
+import IconButton from '@/components/ui/IconButton.astro';
+import { cn } from '@/lib/cn';
+
+import styles from './Modal.module.css';
+
+interface Props {
+  id: string;
+  /** id of the element that names the dialog (usually its heading). */
+  labelledBy: string;
+  class?: string;
+}
+
+const { id, labelledBy, class: className } = Astro.props;
+---
+
+<dialog
+  id={id}
+  aria-labelledby={labelledBy}
+  data-dialog
+  class={cn(
+    styles.modal,
+    'm-auto max-h-[90dvh] w-[calc(100%-2.5rem)] max-w-260 overflow-y-auto rounded-card bg-white p-0 text-noir',
+    className
+  )}
+>
+  <div class="relative p-5 pt-14 md:p-12.5">
+    <IconButton
+      label="Fermer"
+      data-dialog-close
+      data-dialog-focus
+      class="absolute top-3 right-3 text-mandarine md:top-5 md:right-5"
+    >
+      <CloseIcon aria-hidden="true" focusable="false" class="size-8.5" />
+    </IconButton>
+    <slot />
+  </div>
+</dialog>
+
+<script>
+  import { initDialogs } from '@/scripts/dialog';
+
+  initDialogs();
+</script>
