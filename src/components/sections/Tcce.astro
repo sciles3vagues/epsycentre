@@ -1,0 +1,167 @@
+---
+import { Image } from 'astro:assets';
+
+import ArrowIcon from '@/assets/icons/arrow-right.svg';
+import ObjectifsIcon from '@/assets/icons/objectifs.svg';
+import PinIcon from '@/assets/icons/pin.svg';
+import TherapieIcon from '@/assets/icons/therapie.svg';
+import schemaTcce from '@/assets/images/tcce/schema-tcce.png';
+import FlecheParcoursReel from '@/assets/tcce/fleche-parcours-reel.svg';
+import ParcoursBulles from '@/components/tcce/ParcoursBulles.astro';
+import TcceScreen from '@/components/tcce/TcceScreen.astro';
+import Cta from '@/components/ui/Cta.astro';
+import { SITE } from '@/config/site';
+
+const WHAT_IS_IT = [
+  'Des thérapies validées scientifiquement',
+  'Des exercices à pratiquer entre les séances',
+  'Un travail collaboratif patient/thérapeute',
+];
+
+const FOR_WHOM = [
+  'Dépression et troubles de l’humeur',
+  'Troubles du sommeil, fatigue/douleur chronique',
+  'Troubles anxieux (phobies, agoraphobie, trouble anxieux social…)',
+  'Psycho-traumatisme, deuil',
+  'TOC',
+  'Troubles alimentaires et addictions',
+  'Gestion des émotions',
+  'TDAH, TSA',
+  'Épuisement professionnel',
+  'Difficultés d’affirmation de soi',
+];
+
+const HOW_IT_WORKS = [
+  {
+    icon: PinIcon,
+    title: 'Un point de départ',
+    text: 'Premier RDV avec le professionnel de votre choix',
+    hasBookingLink: true,
+  },
+  {
+    icon: ObjectifsIcon,
+    title: 'De vos difficultés aux objectifs thérapeutiques',
+    text: 'Que souhaitez-vous changer ?',
+    hasBookingLink: false,
+  },
+  {
+    icon: TherapieIcon,
+    title: 'Thérapie individuelle et/ou thérapie de groupe',
+    text: 'Accompagnement dans le changement',
+    hasBookingLink: false,
+  },
+];
+
+const SCHEMA_ALT =
+  'Schéma de la thérapie cognitive, comportementale et émotionnelle : trois cercles reliés par des flèches à double sens. Nos pensées créent des émotions ; nos pensées créent un comportement ; notre comportement crée des pensées.';
+
+const BOX = 'rounded-card border-2 border-texte-clair';
+const TITLE_H3 = 'font-heading text-grand-mobile md:typo-grand';
+---
+
+<!--
+  Scroll-steps section (src/scripts/scroll-steps.ts). When pinned, it starts up to one viewport early behind
+  "Notre centre" (curtain entrance, capped at that section's height) and each screen gets one viewport of scroll.
+-->
+<section
+  id="tcce"
+  aria-labelledby="tcce-titre"
+  data-section-bg="gradient"
+  data-scroll-steps
+  class="group/tcce relative isolate text-texte-clair data-[pinned=true]:-mt-(--curtain) data-[pinned=true]:h-[calc(var(--curtain)+var(--steps)*100dvh)] data-[pinned=true]:-scroll-mt-(--curtain)"
+>
+  <div class="bg-gradient-tcce group-data-[pinned=true]/tcce:sticky group-data-[pinned=true]/tcce:top-0 group-data-[pinned=true]/tcce:h-dvh group-data-[pinned=true]/tcce:overflow-hidden">
+    <TcceScreen
+      isFirst
+      intro="Face à une situation, nos émotions, nos pensées et nos comportements interagissent et s’influencent mutuellement."
+    >
+      <div class="flex w-full flex-col gap-12.5 md:flex-row md:items-center md:gap-12">
+        <div class={`${BOX} flex flex-col items-start gap-5 p-5.5 md:flex-1 md:gap-9 md:p-12.5`}>
+          <h3 class={TITLE_H3}>Les TCCE, c’est quoi ?</h3>
+          <ul class="flex flex-col gap-2.5 text-corps-mobile md:text-corps">
+            {WHAT_IS_IT.map(item => (
+              <li>
+                <ArrowIcon aria-hidden="true" focusable="false" class="mr-1.5 inline size-[1em] align-[-0.125em]" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <Cta href={SITE.bookingUrl}>Prendre RDV</Cta>
+        </div>
+        <Image
+          src={schemaTcce}
+          alt={SCHEMA_ALT}
+          widths={[520, 1040]}
+          sizes="50vw"
+          class="hidden h-auto min-w-0 md:block md:flex-1"
+        />
+      </div>
+    </TcceScreen>
+
+    <TcceScreen class="md:hidden">
+      <Image src={schemaTcce} alt={SCHEMA_ALT} widths={[362, 724]} sizes="100vw" class="h-auto w-full" />
+    </TcceScreen>
+
+    <TcceScreen>
+      <div class={`${BOX} flex w-full flex-col gap-5 p-5.5 md:flex-row md:items-center md:p-12.5`}>
+        <h3 class={`${TITLE_H3} md:flex-1`}>Pour qui ?</h3>
+        <ul class="flex flex-col gap-2.5 text-corps-mobile md:flex-1 md:text-corps">
+          {FOR_WHOM.map(item => (
+            <li>
+              <ArrowIcon aria-hidden="true" focusable="false" class="mr-1.5 inline size-[1em] align-[-0.125em]" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </TcceScreen>
+
+    <TcceScreen>
+      <div class="flex w-full flex-col gap-5 md:flex-row md:items-center">
+        <h3 class={`${TITLE_H3} md:flex-1`}>Comment ça marche ?</h3>
+        <ol class="flex flex-col gap-5 md:flex-1">
+          {HOW_IT_WORKS.map(({ icon: Icon, title, text, hasBookingLink }, index) => (
+            <li
+              data-reveal="fade"
+              style={`--reveal-delay: ${index * 200}ms`}
+              class="flex items-start gap-6.25 rounded-box border-2 border-texte-clair p-3 md:p-6.25"
+            >
+              <Icon aria-hidden="true" focusable="false" class="h-auto w-9 shrink-0 md:w-10.25" />
+              <div class="flex flex-col gap-2.5 text-corps-mobile md:text-corps">
+                <h4 class="font-bold">{title}</h4>
+                <p>{text}</p>
+                {hasBookingLink && (
+                  <a href={SITE.bookingUrl} class="underline underline-offset-4">
+                    Cliquez ici<span class="sr-only"> pour prendre rendez-vous</span>
+                  </a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </TcceScreen>
+
+    <TcceScreen>
+      <ParcoursBulles />
+    </TcceScreen>
+
+    <TcceScreen hasTitle={false}>
+      <p class="text-center text-corps-mobile md:text-corps">Mais en réalité, ça ressemble plus à ça :</p>
+      <div data-reveal="wipe" style="--reveal-wipe-duration: 2000ms" class="w-full">
+        <FlecheParcoursReel
+          role="img"
+          aria-label="Une flèche sinueuse, faite de hauts et de bas : le parcours réel n’est pas linéaire."
+          class="h-auto max-h-[35dvh] w-full"
+        />
+      </div>
+      <Cta href={SITE.bookingUrl}>Prendre RDV</Cta>
+    </TcceScreen>
+  </div>
+</section>
+
+<script>
+  import { initScrollSteps } from '@/scripts/scroll-steps';
+
+  initScrollSteps();
+</script>

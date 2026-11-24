@@ -1,0 +1,138 @@
+---
+interface Step {
+  lines: string[];
+  color: string;
+  desktop: { cx: number; cy: number; r: number };
+  mobile: { cx: number; cy: number; r: number };
+  /** Figma layer index (bottom → top) per layout, so overlaps match the design. */
+  layer: { desktop: number; mobile: number };
+}
+
+// Positions from Figma ("Schéma bulles desktop 2" 1097×535, "Schéma bulles mobile 1" 362×438),
+// listed in care-path order (left to right, following the arrow).
+const STEPS: Step[] = [
+  {
+    lines: ['Premier', 'contact'],
+    color: '#2f7ce6',
+    desktop: { cx: 95.9, cy: 293.1, r: 85.1 },
+    mobile: { cx: 53.2, cy: 190.2, r: 39.2 },
+    layer: { desktop: 0, mobile: 0 },
+  },
+  {
+    lines: ['Objectifs'],
+    color: '#7faff0',
+    desktop: { cx: 231, cy: 224, r: 85 },
+    mobile: { cx: 85.2, cy: 255.2, r: 39.2 },
+    layer: { desktop: 6, mobile: 5 },
+  },
+  {
+    lines: ['Éclairage', 'spécialisé'],
+    color: '#c96500',
+    desktop: { cx: 347.4, cy: 114.9, r: 92.1 },
+    mobile: { cx: 129, cy: 52.6, r: 49 },
+    layer: { desktop: 1, mobile: 1 },
+  },
+  {
+    lines: ['Comment', 'les atteindre'],
+    color: '#5494eb',
+    desktop: { cx: 471.7, cy: 224, r: 92.1 },
+    mobile: { cx: 151.9, cy: 176.6, r: 53.9 },
+    layer: { desktop: 2, mobile: 2 },
+  },
+  {
+    lines: ['Accompagnement', 'dans le', 'changement'],
+    color: '#2f7ce6',
+    desktop: { cx: 579.4, cy: 390.9, r: 120.4 },
+    mobile: { cx: 251.4, cy: 297.4, r: 78.4 },
+    layer: { desktop: 7, mobile: 6 },
+  },
+  {
+    lines: ['Suivi', 'médical'],
+    color: '#f28516',
+    desktop: { cx: 676.5, cy: 224, r: 85 },
+    mobile: { cx: 220.2, cy: 131.2, r: 39.2 },
+    layer: { desktop: 3, mobile: 8 },
+  },
+  {
+    lines: ['Thérapies', 'de groupe'],
+    color: '#00a388',
+    desktop: { cx: 767.1, cy: 438.9, r: 85.1 },
+    mobile: { cx: 300, cy: 380, r: 49 },
+    layer: { desktop: 8, mobile: 7 },
+  },
+  {
+    lines: ['Ateliers'],
+    color: '#00ddb8',
+    desktop: { cx: 815.5, cy: 88.9, r: 85 },
+    mobile: { cx: 260.2, cy: 70.2, r: 39.2 },
+    layer: { desktop: 4, mobile: 3 },
+  },
+  {
+    lines: ['Fin du suivi', 'et prévention'],
+    color: '#074ba9',
+    desktop: { cx: 993.5, cy: 224, r: 99.2 },
+    mobile: { cx: 298.8, cy: 168.8, r: 58.8 },
+    layer: { desktop: 5, mobile: 4 },
+  },
+];
+
+const LAYOUTS = [
+  {
+    key: 'desktop',
+    viewBox: '0 0 1097 535',
+    class: 'hidden md:block',
+    fontSize: 24,
+    arrow: { x1: 0, x2: 1097, y: 336.1 },
+  },
+  { key: 'mobile', viewBox: '0 0 362 438', class: 'md:hidden', fontSize: 16, arrow: { x1: 15, x2: 348.8, y: 219.4 } },
+] as const;
+
+const STAGGER_MS = 100;
+---
+
+<div class="mx-auto w-full max-w-274.25">
+  <ol class="sr-only">
+    {STEPS.map(step => (
+      <li>{step.lines.join(' ')}</li>
+    ))}
+  </ol>
+
+  {LAYOUTS.map(layout => (
+    <svg
+      viewBox={layout.viewBox}
+      aria-hidden="true"
+      focusable="false"
+      class={`${layout.class} h-auto w-full overflow-visible font-sans font-bold text-texte-clair`}
+    >
+      {[...STEPS.entries()]
+        .sort(([, a], [, b]) => a.layer[layout.key] - b.layer[layout.key])
+        .map(([index, step]) => {
+          const { cx, cy, r } = step[layout.key];
+          const firstLineY = cy - ((step.lines.length - 1) * layout.fontSize) / 2;
+          return (
+            <g data-reveal="pop" style={`--reveal-delay: ${index * STAGGER_MS}ms`}>
+              <circle cx={cx} cy={cy} r={r} fill={step.color} />
+              <text
+                x={cx}
+                y={firstLineY}
+                font-size={layout.fontSize}
+                text-anchor="middle"
+                dominant-baseline="central"
+                fill="currentColor"
+              >
+                {step.lines.map((line, lineIndex) => (
+                  <tspan x={cx} dy={lineIndex === 0 ? 0 : layout.fontSize}>
+                    {line}
+                  </tspan>
+                ))}
+              </text>
+            </g>
+          );
+        })}
+      <g data-reveal="wipe" style={`--reveal-delay: ${STEPS.length * STAGGER_MS}ms`} fill="currentColor">
+        <rect x={layout.arrow.x1} y={layout.arrow.y - 1} width={layout.arrow.x2 - layout.arrow.x1 - 9} height="2" />
+        <path d={`M${layout.arrow.x2} ${layout.arrow.y} l-10 -5.77 v11.55 z`} />
+      </g>
+    </svg>
+  ))}
+</div>

@@ -1,0 +1,42 @@
+---
+import { cn } from '@/lib/cn';
+
+interface Props {
+  /** The first screen carries the section's real <h2>; the others repeat it visually only. */
+  isFirst?: boolean;
+  hasTitle?: boolean;
+  intro?: string;
+  class?: string;
+}
+
+const { isFirst = false, hasTitle = true, intro, class: className } = Astro.props;
+const TITLE = 'font-heading text-titre-mobile uppercase md:typo-titre';
+---
+
+<div
+  data-step
+  class={cn(
+    'flex flex-col items-center gap-12.5 px-5 py-12.5 md:gap-25 md:px-12.5 md:py-25',
+    'group-data-[pinned=true]/tcce:pointer-events-none group-data-[pinned=true]/tcce:absolute group-data-[pinned=true]/tcce:inset-0 group-data-[pinned=true]/tcce:pt-29 md:group-data-[pinned=true]/tcce:pt-36.75 group-data-[pinned=true]/tcce:gap-[clamp(1.25rem,15dvh-4.5rem,3.125rem)] md:group-data-[pinned=true]/tcce:gap-[clamp(2.5rem,30.3dvh-10.8rem,6.25rem)] group-data-[pinned=true]/tcce:pb-5 md:group-data-[pinned=true]/tcce:pb-5 group-data-[pinned=true]/tcce:opacity-0 group-data-[pinned=true]/tcce:transition-opacity group-data-[pinned=true]/tcce:duration-700 group-data-[pinned=true]/tcce:ease-in-out',
+    'group-data-[pinned=true]/tcce:data-[active=true]:pointer-events-auto group-data-[pinned=true]/tcce:data-[active=true]:opacity-100',
+    className
+  )}
+>
+  {hasTitle && (
+    <div class="flex flex-col items-center gap-3 text-center md:gap-6">
+      {isFirst ? (
+        <h2 id="tcce-titre" class={TITLE}>
+          Les TCCE
+        </h2>
+      ) : (
+        <p aria-hidden="true" class={TITLE}>
+          Les TCCE
+        </p>
+      )}
+      {intro !== undefined && <p class="text-corps-mobile md:text-corps">{intro}</p>}
+    </div>
+  )}
+  <div class="mx-auto box-content flex w-full max-w-260 flex-col items-center gap-12.5 md:gap-25 group-data-[pinned=true]/tcce:gap-[clamp(1.25rem,15dvh-4.5rem,3.125rem)] md:group-data-[pinned=true]/tcce:gap-[clamp(2.5rem,30.3dvh-10.8rem,6.25rem)]">
+    <slot />
+  </div>
+</div>
