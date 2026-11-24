@@ -1,0 +1,98 @@
+---
+import { Image } from 'astro:assets';
+
+import CalendarCheckIcon from '@/assets/icons/calendar-check.svg';
+import ClipboardListIcon from '@/assets/icons/clipboard-list.svg';
+import HouseIcon from '@/assets/icons/house.svg';
+import UsersIcon from '@/assets/icons/users.svg';
+import placeholder from '@/assets/images/team/placeholder.jpg';
+import Cta from '@/components/ui/Cta.astro';
+import Modal from '@/components/ui/Modal.astro';
+
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  member: CollectionEntry<'team'>;
+  modalId: string;
+}
+
+const { member, modalId } = Astro.props;
+const { name, jobTitle, description, publics, problematiques, modalites, rdv } = member.data;
+const titleId = `${modalId}-nom`;
+
+const DETAILS = [
+  { label: 'Public accueilli', value: publics, icon: UsersIcon },
+  { label: 'Problématiques', value: problematiques, icon: ClipboardListIcon },
+  { label: 'Modalités de consultation', value: modalites, icon: HouseIcon },
+];
+
+const HREF = { phone: 'tel:', email: 'mailto:', url: '' } as const;
+const DT = 'flex items-center gap-2 font-semibold';
+const ICON = 'size-5 shrink-0 text-mandarine';
+---
+
+<Modal id={modalId} labelledBy={titleId}>
+  <div class="flex flex-col gap-10 md:flex-row md:items-start md:gap-12.5">
+    <Image
+      src={placeholder}
+      alt=""
+      class="aspect-898/1246 w-50 shrink-0 self-center object-cover md:w-81.5 md:self-auto"
+    />
+
+    <div class="flex flex-col gap-8 text-corps-mobile md:gap-10 md:text-corps">
+      <div class="flex flex-col gap-2.5">
+        <h3 id={titleId} class="font-heading text-grand-mobile md:typo-grand">
+          {name}
+        </h3>
+        <p>
+          {jobTitle} — {description}
+        </p>
+      </div>
+
+      <dl class="flex flex-col gap-4">
+        {DETAILS.map(({ label, value, icon: Icon }) => (
+          <div>
+            <dt class={DT}>
+              <Icon aria-hidden="true" focusable="false" class={ICON} />
+              {label}
+            </dt>
+            <dd class="pl-7">{value}</dd>
+          </div>
+        ))}
+        <div>
+          <dt class={DT}>
+            <CalendarCheckIcon aria-hidden="true" focusable="false" class={ICON} />
+            Prise de RDV
+          </dt>
+          <dd class="pl-7">
+            <ul class="flex flex-col gap-1">
+              {rdv.map(({ type, label, value }) => (
+                <li>
+                  {type === 'url' ? (
+                    <a
+                      href={value}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-tertiary underline underline-offset-4"
+                    >
+                      {label}
+                      <span class="sr-only"> (nouvel onglet)</span>
+                    </a>
+                  ) : (
+                    <a href={`${HREF[type]}${value}`} class="text-tertiary underline underline-offset-4">
+                      {label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <Cta tone="mandarine" data-dialog-close class="mx-auto mt-10 flex w-fit md:mx-0 md:text-corps-mobile md:font-medium">
+    Retour aux membres de l’équipe
+  </Cta>
+</Modal>

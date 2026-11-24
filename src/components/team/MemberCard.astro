@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+
+import PlusCircleIcon from '@/assets/icons/plus-circle.svg';
+import placeholder from '@/assets/images/team/placeholder.jpg';
+
+interface Props {
+  name: string;
+  jobTitle: string;
+  modalId: string;
+}
+
+const { name, jobTitle, modalId } = Astro.props;
+---
+
+<!--
+  < md: photo, name and job title (+ ⊕ button, bottom right) are subgrid rows, aligned across a row of cards.
+  md+: ⊕ sits next to the name; the job title rises over the photo on hover/focus (always shown on touch screens).
+-->
+<article
+  data-clickable-card
+  class="group/card relative grid cursor-pointer row-span-3 grid-rows-subgrid gap-y-0 overflow-hidden bg-fond md:flex md:h-full md:flex-col md:bg-transparent"
+>
+  <Image src={placeholder} alt="" class="col-start-1 row-start-1 aspect-898/1246 w-full object-cover" />
+  <p
+    aria-hidden="true"
+    class="invisible hidden p-3 font-sans md:pr-13 text-nom-mobile md:block md:text-nom md:[@media(hover:none)]:hidden"
+  >
+    {name}
+  </p>
+
+  <div class="contents md:absolute md:inset-x-0 md:bottom-0 md:block md:bg-fond md:p-3 md:[@media(hover:none)]:relative md:[@media(hover:none)]:flex-1">
+    <h3 class="col-start-1 row-start-2 px-3 pt-3 font-sans text-nom-mobile text-noir md:p-0 md:pr-10 md:text-nom">
+      {name}
+    </h3>
+    <div class="contents md:grid md:grid-rows-[0fr] md:group-focus-within/card:grid-rows-[1fr] md:group-hover/card:grid-rows-[1fr] md:motion-safe:transition-[grid-template-rows] md:motion-safe:duration-300 md:motion-safe:ease-in-out md:[@media(hover:none)]:grid-rows-[1fr]">
+      <div class="contents md:flex md:min-h-0 md:flex-col md:items-start md:gap-2.5 md:overflow-hidden md:pb-1">
+        <p class="col-start-1 row-start-3 pt-2.5 pr-12 pb-3 pl-3 text-petit text-noir md:p-0 md:pt-2.5">{jobTitle}</p>
+        <button
+          type="button"
+          data-dialog-open={modalId}
+          data-card-action
+          aria-haspopup="dialog"
+          aria-controls={modalId}
+          aria-expanded="false"
+          class="col-start-1 row-start-3 mr-3 mb-3 self-end justify-self-end text-mandarine md:absolute md:top-3 md:right-3 md:m-0"
+        >
+          <PlusCircleIcon
+            aria-hidden="true"
+            focusable="false"
+            class="size-7 md:motion-safe:[&_*]:transition-colors md:group-hover/card:[&_circle]:fill-mandarine md:group-hover/card:[&_path]:stroke-texte-clair md:group-focus-within/card:[&_circle]:fill-mandarine md:group-focus-within/card:[&_path]:stroke-texte-clair"
+          />
+          <span class="sr-only">Plus d’informations et prendre RDV : {name}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script>
+  import { initClickableCards } from '@/scripts/clickable-card';
+
+  initClickableCards();
+</script>
