@@ -149,6 +149,12 @@ html[data-reveal-ready] [data-reveal='wipe'] {
     }
   }
 
+  /* Tailwind v4 resets buttons to cursor: default. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
   html:has(dialog:modal) {
     overflow: hidden;
   }
