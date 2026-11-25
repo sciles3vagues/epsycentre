@@ -1,6 +1,7 @@
 ---
 import { actions, isInputError } from 'astro:actions';
 
+import AdminApp from '@/components/admin/AdminApp';
 import Cta from '@/components/ui/Cta.astro';
 import BackofficeLayout from '@/layouts/BackofficeLayout.astro';
 import { isAdminSession } from '@/lib/admin-session';
@@ -15,6 +16,7 @@ if ((loginResult !== undefined && loginResult.error === undefined) || logoutResu
 }
 
 const isLoggedIn = await isAdminSession(Astro.session);
+const drafts = isLoggedIn ? await Astro.callAction(actions.admin.getDrafts, {}) : undefined;
 const error = loginResult?.error;
 const loginError = error === undefined ? undefined : isInputError(error) ? 'Saisissez le mot de passe.' : error.message;
 const ERROR_ID = 'mot-de-passe-erreur';
@@ -24,13 +26,21 @@ const TITLE = 'font-heading text-grand-mobile md:typo-grand';
 <BackofficeLayout title="Back-office">
   {isLoggedIn ? (
     <>
-      <h1 class={TITLE}>Back-office</h1>
-      <p class="text-corps-mobile md:text-corps">Vous êtes connecté.</p>
-      <form method="POST" action={actions.admin.logout}>
-        <Cta type="submit" tone="mandarine">
-          Se déconnecter
-        </Cta>
-      </form>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h1 class={TITLE}>Back-office</h1>
+        <form method="POST" action={actions.admin.logout}>
+          <Cta type="submit" tone="mandarine">
+            Se déconnecter
+          </Cta>
+        </form>
+      </div>
+      {drafts?.data === undefined ? (
+        <p role="alert" class="font-semibold text-mandarine">
+          Impossible de charger le contenu. Rechargez la page.
+        </p>
+      ) : (
+        <AdminApp client:load initial={drafts.data} />
+      )}
     </>
   ) : (
     <>
