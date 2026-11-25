@@ -30,7 +30,8 @@ export default defineConfig({
   },
   // Back-office session (Netlify Blobs driver, set by the adapter).
   session: {
-    cookie: { name: 'epsy_admin', sameSite: 'strict', secure: true },
+    // `secure` left to Astro: on in production, off on http://localhost (Safari drops Secure cookies there).
+    cookie: { name: 'epsy_admin', sameSite: 'strict' },
     ttl: 8 * 60 * 60,
   },
   fonts: [
