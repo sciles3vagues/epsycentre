@@ -17,7 +17,8 @@ type ButtonProps = BaseProps & Omit<HTMLAttributes<'button'>, 'class'> & { href?
 
 export type Props = LinkProps | ButtonProps;
 
-const { tone = 'clair', variant = 'outline', class: className, ...rest } = Astro.props;
+// `type` is pulled out so it's rendered once: with a duplicate attribute the browser keeps the first one.
+const { tone = 'clair', variant = 'outline', class: className, type, ...rest } = Astro.props;
 
 const OUTLINE: Record<Tone, string> = {
   clair:
@@ -49,11 +50,11 @@ const classes = cn(
 ---
 
 {rest.href !== undefined ? (
-  <a class={classes} {...rest}>
+  <a class={classes} type={type} {...rest}>
     <slot />
   </a>
 ) : (
-  <button type="button" class={classes} {...rest}>
+  <button type={type ?? 'button'} class={classes} {...rest}>
     <slot />
   </button>
 )}
