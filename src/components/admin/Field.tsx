@@ -10,24 +10,27 @@ interface Props {
   isMultiline?: boolean;
   type?: 'text' | 'email' | 'tel' | 'url';
   pattern?: string;
-  hint?: string;
+  /** Example value only: the label stays visible and carries the meaning. */
+  placeholder?: string;
 }
 
-export function Field({ label, value, onChange, maxLength, isMultiline = false, type = 'text', pattern, hint }: Props) {
+export function Field({
+  label,
+  value,
+  onChange,
+  maxLength,
+  isMultiline = false,
+  type = 'text',
+  pattern,
+  placeholder,
+}: Props) {
   const id = useId();
-  const hintId = `${id}-aide`;
-  const describedBy = hint === undefined ? undefined : hintId;
 
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={id} className="font-semibold">
         {label}
       </label>
-      {hint !== undefined && (
-        <p id={hintId} className="text-petit text-tertiary">
-          {hint}
-        </p>
-      )}
       {isMultiline ? (
         <textarea
           id={id}
@@ -36,7 +39,7 @@ export function Field({ label, value, onChange, maxLength, isMultiline = false, 
           required
           maxLength={maxLength}
           rows={3}
-          aria-describedby={describedBy}
+          placeholder={placeholder}
           className={INPUT}
         />
       ) : (
@@ -48,7 +51,7 @@ export function Field({ label, value, onChange, maxLength, isMultiline = false, 
           required
           maxLength={maxLength}
           pattern={pattern}
-          aria-describedby={describedBy}
+          placeholder={placeholder}
           className={INPUT}
         />
       )}

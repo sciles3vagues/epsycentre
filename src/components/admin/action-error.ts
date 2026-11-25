@@ -7,8 +7,7 @@ const FIELD_LABELS: Record<string, string> = {
   publics: 'Public accueilli',
   problematiques: 'Problématiques',
   modalites: 'Modalités de consultation',
-  label: 'Texte affiché (prise de RDV)',
-  value: 'Coordonnée (prise de RDV)',
+  value: 'Prise de RDV',
   photo: 'Photo',
 };
 

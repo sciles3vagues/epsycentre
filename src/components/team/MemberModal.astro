@@ -2,6 +2,9 @@
 import CalendarCheckIcon from '@/assets/icons/calendar-check.svg';
 import ClipboardListIcon from '@/assets/icons/clipboard-list.svg';
 import HouseIcon from '@/assets/icons/house.svg';
+import LinkIcon from '@/assets/icons/link.svg';
+import MailIcon from '@/assets/icons/mail.svg';
+import PhoneIcon from '@/assets/icons/phone.svg';
 import UsersIcon from '@/assets/icons/users.svg';
 import MemberPhoto from '@/components/team/MemberPhoto.astro';
 import Cta from '@/components/ui/Cta.astro';
@@ -24,7 +27,8 @@ const DETAILS = [
   { label: 'Modalités de consultation', value: modalites, icon: HouseIcon },
 ];
 
-const HREF = { phone: 'tel:', email: 'mailto:', url: '' } as const;
+const RDV_ICON = { phone: PhoneIcon, email: MailIcon, url: LinkIcon } as const;
+const telHref = (phone: string): string => `tel:${phone.replace(/[\s.-]/g, '')}`;
 const DT = 'flex items-center gap-2 font-semibold';
 const ICON = 'size-5 shrink-0 text-mandarine';
 ---
@@ -65,25 +69,32 @@ const ICON = 'size-5 shrink-0 text-mandarine';
           </dt>
           <dd class="pl-7">
             <ul class="flex flex-col gap-1">
-              {rdv.map(({ type, label, value }) => (
-                <li>
-                  {type === 'url' ? (
-                    <a
-                      href={value}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="text-tertiary underline underline-offset-4"
-                    >
-                      {label}
-                      <span class="sr-only"> (nouvel onglet)</span>
-                    </a>
-                  ) : (
-                    <a href={`${HREF[type]}${value}`} class="text-tertiary underline underline-offset-4">
-                      {label}
-                    </a>
-                  )}
-                </li>
-              ))}
+              {rdv.map(({ type, value }) => {
+                const Icon = RDV_ICON[type];
+                return (
+                  <li class="flex items-center gap-2">
+                    <Icon aria-hidden="true" focusable="false" class="size-4 shrink-0 text-tertiary" />
+                    {type === 'url' ? (
+                      <a
+                        href={value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-tertiary underline underline-offset-4"
+                      >
+                        Prendre RDV en ligne
+                        <span class="sr-only"> (nouvel onglet)</span>
+                      </a>
+                    ) : (
+                      <a
+                        href={type === 'phone' ? telHref(value) : `mailto:${value}`}
+                        class="text-tertiary underline underline-offset-4"
+                      >
+                        {value}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </dd>
         </div>
