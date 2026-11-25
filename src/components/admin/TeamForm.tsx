@@ -18,9 +18,9 @@ import type { Member, Rdv } from '@/components/admin/entries';
 const MAX_RDV = 5;
 
 const RDV_TYPES = {
-  phone: { label: 'Téléphone', inputType: 'tel', hint: 'Exemple : 05 59 00 00 00' },
-  email: { label: 'E-mail', inputType: 'email', hint: 'Exemple : nom@exemple.fr' },
-  url: { label: 'Lien (Doctolib…)', inputType: 'url', hint: 'Adresse complète commençant par https://' },
+  phone: { label: 'Téléphone', inputType: 'tel', placeholder: '05 59 00 00 00' },
+  email: { label: 'E-mail', inputType: 'email', placeholder: 'nom@exemple.fr' },
+  url: { label: 'Lien de prise de RDV', inputType: 'url', placeholder: 'https://www.doctolib.fr/…' },
 } as const;
 
 type RdvLine = Rdv & { key: string };
@@ -71,8 +71,20 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
       </h3>
 
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Nom" value={draft.name} maxLength={100} onChange={name => update({ name })} />
-        <Field label="Fonction" value={draft.jobTitle} maxLength={100} onChange={jobTitle => update({ jobTitle })} />
+        <Field
+          label="Nom"
+          value={draft.name}
+          maxLength={100}
+          placeholder="Dr Prénom Nom"
+          onChange={name => update({ name })}
+        />
+        <Field
+          label="Fonction"
+          value={draft.jobTitle}
+          maxLength={100}
+          placeholder="Psychologue"
+          onChange={jobTitle => update({ jobTitle })}
+        />
       </div>
       <Field
         label="Description"
@@ -139,11 +151,13 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
       <fieldset className="flex flex-col gap-4">
         <legend className="mb-2 font-semibold">Prise de RDV</legend>
         {lines.map((line, index) => {
-          const { label: typeLabel, inputType, hint } = RDV_TYPES[line.type];
+          const { label: typeLabel, inputType, placeholder } = RDV_TYPES[line.type];
           return (
-            <div key={line.key} className="flex flex-col gap-3 rounded-box border-2 border-tertiary/30 p-4">
-              <label className="flex flex-col gap-1">
-                <span className="font-semibold">Type (moyen {index + 1})</span>
+            // One group per line so screen readers can tell the « Type » fields apart.
+            <fieldset key={line.key} className="flex flex-col gap-3 md:flex-row md:items-end">
+              <legend className="sr-only">Moyen de RDV {index + 1}</legend>
+              <label className="flex flex-col gap-1 md:w-56">
+                <span className="font-semibold">Type</span>
                 <select
                   value={line.type}
                   onChange={event => updateLine(line.key, { type: event.target.value as Rdv['type'] })}
@@ -156,30 +170,26 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
                   ))}
                 </select>
               </label>
-              <Field
-                label={`Texte affiché (${typeLabel})`}
-                value={line.label}
-                maxLength={line.type === 'phone' ? 60 : 120}
-                onChange={label => updateLine(line.key, { label })}
-              />
-              <Field
-                label={typeLabel}
-                type={inputType}
-                value={line.value}
-                maxLength={300}
-                pattern={line.type === 'url' ? 'https://.+' : undefined}
-                hint={hint}
-                onChange={value => updateLine(line.key, { value })}
-              />
+              <div className="md:flex-1">
+                <Field
+                  label={typeLabel}
+                  type={inputType}
+                  value={line.value}
+                  maxLength={300}
+                  pattern={line.type === 'url' ? 'https://.+' : undefined}
+                  placeholder={placeholder}
+                  onChange={value => updateLine(line.key, { value })}
+                />
+              </div>
               <button
                 type="button"
-                className={`${BUTTON_DANGER} self-start`}
+                className={`${BUTTON_DANGER} self-start md:mb-1 md:self-auto`}
                 onClick={() => setLines(lines.filter(({ key }) => key !== line.key))}
               >
                 <TrashIcon />
-                Retirer ce moyen de RDV
+                Supprimer<span className="sr-only"> le moyen de RDV {index + 1}</span>
               </button>
-            </div>
+            </fieldset>
           );
         })}
         {lines.length < MAX_RDV && (
@@ -187,7 +197,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
             type="button"
             className={`${BUTTON_NEUTRAL} self-start`}
             onClick={() =>
-              setLines([...lines, { type: 'phone', label: '', value: '', key: crypto.randomUUID() } satisfies RdvLine])
+              setLines([...lines, { type: 'phone', value: '', key: crypto.randomUUID() } satisfies RdvLine])
             }
           >
             <PlusIcon />

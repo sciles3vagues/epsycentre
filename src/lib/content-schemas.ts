@@ -8,14 +8,13 @@ export const photoKeySchema = z.uuid();
 const rdvSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('phone'),
-    label: text(60),
     value: z
       .string()
       .trim()
       .regex(/^\+?[0-9][0-9 .-]{5,19}$/),
   }),
-  z.object({ type: z.literal('email'), label: text(120), value: z.email() }),
-  z.object({ type: z.literal('url'), label: text(120), value: z.url({ protocol: /^https$/ }) }),
+  z.object({ type: z.literal('email'), value: z.email() }),
+  z.object({ type: z.literal('url'), value: z.url({ protocol: /^https$/ }) }),
 ]);
 
 export const teamMemberSchema = z.object({

@@ -35,13 +35,9 @@ version en ligne.
 **Photo** : JPEG, PNG ou WebP, 5 Mo maximum. Elle est recadrée en portrait sur le site : préférez une photo où le
 visage est centré. Pensez à **Enregistrer** le membre après avoir ajouté ou retiré une photo.
 
-**Prise de RDV** (5 maximum par membre) :
-
-- **Téléphone** : par exemple `05 59 00 00 00` ;
-- **E-mail** : une adresse complète, par exemple `nom@exemple.fr` ;
-- **Lien** (Doctolib…) : l’adresse complète, commençant par `https://`.
-
-Le « texte affiché » est ce que verront les visiteurs (par exemple « Prendre RDV sur Doctolib »).
+**Prise de RDV** (5 maximum par membre) : choisissez le type (téléphone, e-mail ou lien de prise de RDV en ligne),
+puis saisissez le numéro, l’adresse e-mail ou le lien complet (commençant par `https://`). Le site affiche une icône
+selon le type.
 
 ## Les groupes
 

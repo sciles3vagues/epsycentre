@@ -29,7 +29,13 @@ export function GroupeForm({ groupe, isNew, isBusy, onSave, onCancel }: Props) {
       <h3 ref={headingRef} tabIndex={-1} className="font-heading text-nom-mobile md:text-nom">
         {isNew ? 'Nouveau groupe' : `Modifier « ${groupe.name} »`}
       </h3>
-      <Field label="Nom" value={draft.name} maxLength={100} onChange={name => setDraft({ ...draft, name })} />
+      <Field
+        label="Nom"
+        value={draft.name}
+        maxLength={100}
+        placeholder="Anxiété sociale"
+        onChange={name => setDraft({ ...draft, name })}
+      />
       <Field
         label="Description"
         value={draft.description}
