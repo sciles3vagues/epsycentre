@@ -1,18 +1,10 @@
 import { defineCollection } from 'astro:content';
 
-import groupesFixtures from '@/content/fixtures/groupes.json';
-import teamFixtures from '@/content/fixtures/team.json';
 import { publishedLoader } from '@/content/published-loader';
 import { groupeSchema, teamMemberSchema } from '@/lib/content-schemas';
 
-const team = defineCollection({
-  loader: publishedLoader({ collection: 'team', fixtures: teamFixtures }),
-  schema: teamMemberSchema,
-});
+const team = defineCollection({ loader: publishedLoader('team'), schema: teamMemberSchema });
 
-const groupes = defineCollection({
-  loader: publishedLoader({ collection: 'groupes', fixtures: groupesFixtures }),
-  schema: groupeSchema,
-});
+const groupes = defineCollection({ loader: publishedLoader('groupes'), schema: groupeSchema });
 
 export const collections = { team, groupes };
