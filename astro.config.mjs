@@ -1,4 +1,5 @@
 // @ts-check
+import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -11,6 +12,8 @@ export default defineConfig({
   site: SITE_URL,
   trailingSlash: 'never',
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
+  // Edge Functions aren't used; their local emulation needs a matching Deno install.
+  adapter: netlify({ devFeatures: { edgeFunctions: false, images: true, environmentVariables: false } }),
   integrations: [react(), sitemap()],
   fonts: [
     {

@@ -22,7 +22,6 @@ pnpm dev               # http://localhost:4321
 | --------------- | -------------------------------------------------------- |
 | `pnpm dev`      | Dev server                                               |
 | `pnpm build`    | Type-check (`astro check`) + production build to `dist/` |
-| `pnpm preview`  | Serve the production build                               |
 | `pnpm lint`     | ESLint (TypeScript, Astro, React, jsx-a11y strict)       |
 | `pnpm format`   | Prettier (imports + Tailwind classes sorted)             |
 | `pnpm test:e2e` | Playwright + axe accessibility/SEO checks                |
