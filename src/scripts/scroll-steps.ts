@@ -2,6 +2,8 @@ import { onScrollFrame } from '@/lib/on-scroll-frame';
 
 /** Pinned mode needs enough height to show a whole screen, and motion allowed (else screens stack normally). */
 const PINNED_QUERY = '(prefers-reduced-motion: no-preference) and (min-height: 40rem)';
+/** Scroll distance per screen, as a fraction of the viewport height. */
+const STEP_SCROLL = 0.5;
 
 const visibleSteps = (root: HTMLElement): HTMLElement[] =>
   [...root.querySelectorAll<HTMLElement>('[data-step]')].filter(step => getComputedStyle(step).display !== 'none');
@@ -14,13 +16,16 @@ const revealIn = (element: Element): void => {
 
 /**
  * `[data-scroll-steps]` sections: the panel is pinned behind the previous section (curtain entrance),
- * then each `[data-step]` screen replaces the previous one as the user scrolls (one viewport per screen).
+ * then each `[data-step]` screen replaces the previous one as the user scrolls (STEP_SCROLL viewport per screen).
  */
 function setup(root: HTMLElement): void {
   const media = window.matchMedia(PINNED_QUERY);
   let steps: HTMLElement[] = [];
   // Curtain = how far the panel tucks under the previous section; never more than that section.
   let curtain = 0;
+
+  const stepTop = (index: number): number =>
+    root.getBoundingClientRect().top + window.scrollY + curtain + index * STEP_SCROLL * window.innerHeight;
 
   const activate = (index: number): void => {
     steps.forEach((step, stepIndex) => {
@@ -36,8 +41,7 @@ function setup(root: HTMLElement): void {
     if (root.dataset.pinned !== 'true' || steps.length === 0) {
       return;
     }
-    const viewport = window.innerHeight;
-    const progress = (-root.getBoundingClientRect().top - curtain) / viewport;
+    const progress = (-root.getBoundingClientRect().top - curtain) / (STEP_SCROLL * window.innerHeight);
     activate(Math.min(steps.length - 1, Math.max(0, Math.round(progress))));
   };
 
@@ -59,6 +63,7 @@ function setup(root: HTMLElement): void {
     curtain = previous instanceof HTMLElement ? Math.min(previous.offsetHeight, window.innerHeight) : 0;
     root.style.setProperty('--curtain', `${curtain}px`);
     root.style.setProperty('--steps', String(steps.length));
+    root.style.setProperty('--step-scroll', `${STEP_SCROLL * 100}dvh`);
     document.documentElement.dataset.revealReady = 'true';
     update();
   };
@@ -69,9 +74,7 @@ function setup(root: HTMLElement): void {
     if (root.dataset.pinned !== 'true' || step === null || step.dataset.active === 'true') {
       return;
     }
-    const index = steps.indexOf(step);
-    const trackTop = root.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: trackTop + curtain + index * window.innerHeight, behavior: 'instant' });
+    window.scrollTo({ top: stepTop(steps.indexOf(step)), behavior: 'instant' });
   });
 
   media.addEventListener('change', layout);

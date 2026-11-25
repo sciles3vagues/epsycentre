@@ -61,14 +61,14 @@ const TITLE_H3 = 'font-heading text-grand-mobile md:typo-grand';
 
 <!--
   Scroll-steps section (src/scripts/scroll-steps.ts). When pinned, it starts up to one viewport early behind
-  "Notre centre" (curtain entrance, capped at that section's height) and each screen gets one viewport of scroll.
+  the previous section (curtain entrance, capped at that section's height) and each screen gets half a viewport of scroll.
 -->
 <section
   id="tcce"
   aria-labelledby="tcce-titre"
   data-section-bg="gradient"
   data-scroll-steps
-  class="group/tcce relative isolate text-texte-clair data-[pinned=true]:-mt-(--curtain) data-[pinned=true]:h-[calc(var(--curtain)+var(--steps)*100dvh)] data-[pinned=true]:-scroll-mt-(--curtain)"
+  class="group/tcce relative isolate text-texte-clair data-[pinned=true]:-mt-(--curtain) data-[pinned=true]:h-[calc(var(--curtain)+100dvh+(var(--steps)-1)*var(--step-scroll))] data-[pinned=true]:-scroll-mt-(--curtain)"
 >
   <div class="bg-gradient-tcce group-data-[pinned=true]/tcce:sticky group-data-[pinned=true]/tcce:top-0 group-data-[pinned=true]/tcce:h-dvh group-data-[pinned=true]/tcce:overflow-hidden">
     <TcceScreen
