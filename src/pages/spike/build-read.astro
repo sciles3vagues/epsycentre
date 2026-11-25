@@ -8,6 +8,9 @@ try {
 } catch (error) {
   result = `error: ${error instanceof Error ? error.name + ' ' + error.message : String(error)}`;
 }
+const ENV_NAMES = ['NETLIFY', 'SITE_ID', 'DEPLOY_ID', 'CONTEXT', 'NETLIFY_BLOBS_CONTEXT', 'NETLIFY_SITE_ID'];
+const env = ENV_NAMES.map(name => `${name}=${process.env[name] === undefined ? 'unset' : 'set'}`).join(', ');
 ---
 
 <p>{result}</p>
+<p>{env}</p>
