@@ -5,11 +5,12 @@ import {
   BUTTON_NEUTRAL,
   BUTTON_PRIMARY,
   BUTTON_SECONDARY,
+  FILE_BUTTON,
   INPUT,
   PANEL,
 } from '@/components/admin/classes';
 import { Field } from '@/components/admin/Field';
-import { PlusIcon, TrashIcon } from '@/components/admin/icons';
+import { PlusIcon, TrashIcon, UploadIcon } from '@/components/admin/icons';
 import { useFocusOnMount } from '@/components/admin/useFocusOnMount';
 
 import type { Member, Rdv } from '@/components/admin/entries';
@@ -111,7 +112,6 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
             className="aspect-898/1246 w-32 rounded-box object-cover"
           />
         )}
-        <label htmlFor={photoId}>{draft.photo === undefined ? 'Ajouter une photo' : 'Remplacer la photo'}</label>
         <input
           id={photoId}
           type="file"
@@ -119,7 +119,12 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
           aria-describedby={`${photoId}-aide`}
           disabled={isUploading}
           onChange={event => void handlePhoto(event.target.files?.[0])}
+          className="peer sr-only"
         />
+        <label htmlFor={photoId} className={FILE_BUTTON}>
+          <UploadIcon />
+          {draft.photo === undefined ? 'Ajouter une photo' : 'Remplacer la photo'}
+        </label>
         <p id={`${photoId}-aide`} className="text-petit text-tertiary">
           {isUploading ? 'Envoi de la photo…' : 'JPEG, PNG ou WebP, 5 Mo maximum. Recadrée en portrait sur le site.'}
         </p>
