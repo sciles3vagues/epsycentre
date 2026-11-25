@@ -17,11 +17,10 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
   ],
   webServer: {
-    // --ignore-lock: one-off foreground server (Astro auto-backgrounds preview when it detects an AI agent,
-    // which makes Playwright think the server exited and leaves an orphan process behind).
-    command: `pnpm build && pnpm preview --port ${PORT} --ignore-lock`,
+    // Dev server: the Netlify adapter has no `astro preview`, and dev emulates Netlify Blobs.
+    // --ignore-lock: one-off foreground server, even if a dev server already runs on 4321.
+    command: `pnpm astro dev --port ${PORT} --ignore-lock`,
     url: `http://localhost:${PORT}`,
-    // Always rebuild: reusing a server would silently test a stale dist/.
     reuseExistingServer: false,
     timeout: 120_000,
   },

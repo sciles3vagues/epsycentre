@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
     "lint": "eslint .",
@@ -22,8 +21,10 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@astrojs/netlify": "^8.2.14",
     "@astrojs/react": "^7.1.9",
     "@astrojs/sitemap": "^3.7.6",
+    "@netlify/blobs": "^11.1.11",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.13",
     "clsx": "^2.1.1",
