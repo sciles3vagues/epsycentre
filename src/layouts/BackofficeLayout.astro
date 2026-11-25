@@ -1,0 +1,38 @@
+---
+import { Font } from 'astro:assets';
+
+import { SITE } from '@/config/site';
+
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+// Private page: never indexed, cached or framed.
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('Content-Security-Policy', "frame-ancestors 'none'");
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Font cssVariable="--font-manrope" preload={[{ weight: '700' }]} />
+    <Font cssVariable="--font-inter" preload={[{ weight: '400' }]} />
+    <title>{`${title} | ${SITE.name}`}</title>
+  </head>
+  <body class="min-h-dvh bg-fond text-noir">
+    <main class="mx-auto flex w-full max-w-260 flex-col gap-8 px-5 py-12 md:px-12.5">
+      <slot />
+    </main>
+  </body>
+</html>
