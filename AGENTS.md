@@ -24,13 +24,12 @@ Epsycentre — French-language marketing/content site. Priorities, in order:
 nvm use               # Node 26 LTS from .nvmrc
 pnpm dev              # dev server on localhost:4321 (agents: `pnpm astro dev --background`, then `astro dev stop|status|logs`)
 pnpm build            # astro check (types) + production build to dist/
-pnpm preview          # serve dist/
 pnpm check            # type-check .astro/.ts only
 pnpm lint             # ESLint (incl. jsx-a11y strict on .astro and .tsx)
 pnpm lint:fix
 pnpm format           # Prettier (sorts imports + Tailwind classes)
 pnpm format:check
-pnpm test:e2e         # Playwright: axe WCAG A/AA scan + keyboard/SEO + header checks on the production build
+pnpm test:e2e         # Playwright: axe WCAG A/AA scan + keyboard/SEO + header checks on the dev server (the Netlify adapter has no `astro preview`)
 pnpm validate         # everything CI runs
 ```
 

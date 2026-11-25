@@ -36,3 +36,6 @@ blob-report/
 
 # claude code (personal settings only)
 .claude/settings.local.json
+
+# Local Netlify folder
+.netlify
