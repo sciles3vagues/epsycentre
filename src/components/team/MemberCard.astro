@@ -1,16 +1,15 @@
 ---
-import { Image } from 'astro:assets';
-
 import PlusCircleIcon from '@/assets/icons/plus-circle.svg';
-import placeholder from '@/assets/images/team/placeholder.jpg';
+import MemberPhoto from '@/components/team/MemberPhoto.astro';
 
 interface Props {
   name: string;
   jobTitle: string;
+  photo: string | undefined;
   modalId: string;
 }
 
-const { name, jobTitle, modalId } = Astro.props;
+const { name, jobTitle, photo, modalId } = Astro.props;
 ---
 
 <!--
@@ -21,7 +20,12 @@ const { name, jobTitle, modalId } = Astro.props;
   data-clickable-card
   class="group/card relative grid cursor-pointer row-span-3 grid-rows-subgrid gap-y-0 overflow-hidden bg-fond md:flex md:h-full md:flex-col md:bg-transparent"
 >
-  <Image src={placeholder} alt="" class="col-start-1 row-start-1 aspect-898/1246 w-full object-cover" />
+  <MemberPhoto
+    photo={photo}
+    name={name}
+    sizes="(min-width: 768px) 326px, 50vw"
+    class="col-start-1 row-start-1 aspect-898/1246 w-full object-cover"
+  />
   <p
     aria-hidden="true"
     class="invisible hidden p-3 font-sans md:pr-13 text-nom-mobile md:block md:text-nom md:[@media(hover:none)]:hidden"

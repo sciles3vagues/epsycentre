@@ -1,11 +1,9 @@
 ---
-import { Image } from 'astro:assets';
-
 import CalendarCheckIcon from '@/assets/icons/calendar-check.svg';
 import ClipboardListIcon from '@/assets/icons/clipboard-list.svg';
 import HouseIcon from '@/assets/icons/house.svg';
 import UsersIcon from '@/assets/icons/users.svg';
-import placeholder from '@/assets/images/team/placeholder.jpg';
+import MemberPhoto from '@/components/team/MemberPhoto.astro';
 import Cta from '@/components/ui/Cta.astro';
 import Modal from '@/components/ui/Modal.astro';
 
@@ -17,7 +15,7 @@ interface Props {
 }
 
 const { member, modalId } = Astro.props;
-const { name, jobTitle, description, publics, problematiques, modalites, rdv } = member.data;
+const { name, jobTitle, description, publics, problematiques, modalites, rdv, photo } = member.data;
 const titleId = `${modalId}-nom`;
 
 const DETAILS = [
@@ -33,9 +31,10 @@ const ICON = 'size-5 shrink-0 text-mandarine';
 
 <Modal id={modalId} labelledBy={titleId}>
   <div class="flex flex-col gap-10 md:flex-row md:items-start md:gap-12.5">
-    <Image
-      src={placeholder}
-      alt=""
+    <MemberPhoto
+      photo={photo}
+      name={name}
+      sizes="(min-width: 768px) 326px, 200px"
       class="aspect-898/1246 w-50 shrink-0 self-center object-cover md:w-81.5 md:self-auto"
     />
 
