@@ -1,5 +1,8 @@
 import { z } from 'astro/zod';
 
+/** Key of a photo stored in Blobs (random UUID), served by `/media/<key>`. */
+export const photoKeySchema = z.uuid();
+
 export const teamMemberSchema = z.object({
   order: z.number(),
   name: z.string(),
@@ -15,6 +18,7 @@ export const teamMemberSchema = z.object({
       value: z.string(),
     })
   ),
+  photo: photoKeySchema.optional(),
 });
 
 export const groupeSchema = z.object({
