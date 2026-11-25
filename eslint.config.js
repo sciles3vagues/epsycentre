@@ -55,7 +55,8 @@ export default defineConfig(
       reactHooks.configs.flat.recommended,
       jsxA11y.flatConfigs.strict,
     ],
-    settings: { react: { version: 'detect' } },
+    // Explicit: eslint-plugin-react's 'detect' calls an API removed in ESLint 10 (crashes on .tsx files).
+    settings: { react: { version: '19.3' } },
     rules: {
       'react/prop-types': 'off',
       'react/no-array-index-key': 'error',
