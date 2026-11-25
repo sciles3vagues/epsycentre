@@ -14,11 +14,15 @@ const groupes = (await getCollection('groupes')).sort((a, b) => a.data.order - b
   tone="secondary"
   ctaVariant="solid"
 >
-  <ul class="mx-auto flex max-w-279 flex-col items-center gap-5 md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-20">
-    {groupes.map(({ data }) => (
-      <li>
-        <GroupPill name={data.name} description={data.description} />
-      </li>
-    ))}
-  </ul>
+  {groupes.length === 0 ? (
+    <p class="text-center text-corps-mobile md:text-corps">La liste des groupes n’est pas disponible pour le moment.</p>
+  ) : (
+    <ul class="mx-auto flex max-w-279 flex-col items-center gap-5 md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-20">
+      {groupes.map(({ data }) => (
+        <li>
+          <GroupPill name={data.name} description={data.description} />
+        </li>
+      ))}
+    </ul>
+  )}
 </Section>
