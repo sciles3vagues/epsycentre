@@ -1,0 +1,63 @@
+---
+import { actions, isInputError } from 'astro:actions';
+
+import Cta from '@/components/ui/Cta.astro';
+import BackofficeLayout from '@/layouts/BackofficeLayout.astro';
+import { isAdminSession } from '@/lib/admin-session';
+
+export const prerender = false;
+
+const loginResult = Astro.getActionResult(actions.admin.login);
+const logoutResult = Astro.getActionResult(actions.admin.logout);
+// Post/redirect/get: a refresh never resubmits the form.
+if ((loginResult !== undefined && loginResult.error === undefined) || logoutResult !== undefined) {
+  return Astro.redirect('/backoffice', 303);
+}
+
+const isLoggedIn = await isAdminSession(Astro.session);
+const error = loginResult?.error;
+const loginError = error === undefined ? undefined : isInputError(error) ? 'Saisissez le mot de passe.' : error.message;
+const ERROR_ID = 'mot-de-passe-erreur';
+const TITLE = 'font-heading text-grand-mobile md:typo-grand';
+---
+
+<BackofficeLayout title="Back-office">
+  {isLoggedIn ? (
+    <>
+      <h1 class={TITLE}>Back-office</h1>
+      <p class="text-corps-mobile md:text-corps">Vous êtes connecté.</p>
+      <form method="POST" action={actions.admin.logout}>
+        <Cta type="submit" tone="mandarine">
+          Se déconnecter
+        </Cta>
+      </form>
+    </>
+  ) : (
+    <>
+      <h1 class={TITLE}>Connexion au back-office</h1>
+      <form method="POST" action={actions.admin.login} class="flex max-w-100 flex-col gap-3">
+        <label for="mot-de-passe" class="font-semibold">
+          Mot de passe
+        </label>
+        <input
+          id="mot-de-passe"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          aria-invalid={loginError === undefined ? undefined : 'true'}
+          aria-describedby={loginError === undefined ? undefined : ERROR_ID}
+          class="rounded-box border-2 border-tertiary bg-white px-4 py-3 text-corps-mobile"
+        />
+        {loginError !== undefined && (
+          <p id={ERROR_ID} role="alert" class="text-mandarine">
+            {loginError}
+          </p>
+        )}
+        <Cta type="submit" tone="mandarine" variant="solid" class="mt-3 self-start">
+          Se connecter
+        </Cta>
+      </form>
+    </>
+  )}
+</BackofficeLayout>
