@@ -1,0 +1,13 @@
+---
+import { getStore } from '@netlify/blobs';
+
+let result: string;
+try {
+  const data: unknown = await getStore('content').get('spike/team', { type: 'json' });
+  result = `ok: ${JSON.stringify(data)}`;
+} catch (error) {
+  result = `error: ${error instanceof Error ? error.name + ' ' + error.message : String(error)}`;
+}
+---
+
+<p>{result}</p>
