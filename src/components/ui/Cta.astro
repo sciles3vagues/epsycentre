@@ -19,6 +19,7 @@ export type Props = LinkProps | ButtonProps;
 
 // `type` is pulled out so it's rendered once: with a duplicate attribute the browser keeps the first one.
 const { tone = 'clair', variant = 'outline', class: className, type, ...rest } = Astro.props;
+const buttonType = type === 'submit' || type === 'reset' ? type : 'button';
 
 const OUTLINE: Record<Tone, string> = {
   clair:
@@ -54,7 +55,7 @@ const classes = cn(
     <slot />
   </a>
 ) : (
-  <button type={type ?? 'button'} class={classes} {...rest}>
+  <button type={buttonType} class={classes} {...rest}>
     <slot />
   </button>
 )}
