@@ -1,7 +1,15 @@
 import { useId, useState } from 'react';
 
-import { BUTTON_PRIMARY, BUTTON_SECONDARY, BUTTON_SMALL, INPUT, PANEL } from '@/components/admin/classes';
+import {
+  BUTTON_DANGER,
+  BUTTON_NEUTRAL,
+  BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
+  INPUT,
+  PANEL,
+} from '@/components/admin/classes';
 import { Field } from '@/components/admin/Field';
+import { PlusIcon, TrashIcon } from '@/components/admin/icons';
 import { useFocusOnMount } from '@/components/admin/useFocusOnMount';
 
 import type { Member, Rdv } from '@/components/admin/entries';
@@ -116,7 +124,8 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
           {isUploading ? 'Envoi de la photo…' : 'JPEG, PNG ou WebP, 5 Mo maximum. Recadrée en portrait sur le site.'}
         </p>
         {draft.photo !== undefined && (
-          <button type="button" className={`${BUTTON_SMALL} self-start`} onClick={() => update({ photo: undefined })}>
+          <button type="button" className={`${BUTTON_DANGER} self-start`} onClick={() => update({ photo: undefined })}>
+            <TrashIcon />
             Retirer la photo
           </button>
         )}
@@ -159,9 +168,10 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
               />
               <button
                 type="button"
-                className={`${BUTTON_SMALL} self-start`}
+                className={`${BUTTON_DANGER} self-start`}
                 onClick={() => setLines(lines.filter(({ key }) => key !== line.key))}
               >
+                <TrashIcon />
                 Retirer ce moyen de RDV
               </button>
             </div>
@@ -170,11 +180,12 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
         {lines.length < MAX_RDV && (
           <button
             type="button"
-            className={`${BUTTON_SMALL} self-start`}
+            className={`${BUTTON_NEUTRAL} self-start`}
             onClick={() =>
               setLines([...lines, { type: 'phone', label: '', value: '', key: crypto.randomUUID() } satisfies RdvLine])
             }
           >
+            <PlusIcon />
             Ajouter un moyen de RDV
           </button>
         )}
