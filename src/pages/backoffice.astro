@@ -57,7 +57,7 @@ const TITLE = 'font-heading text-grand-mobile md:typo-grand';
           required
           aria-invalid={loginError === undefined ? undefined : 'true'}
           aria-describedby={loginError === undefined ? undefined : ERROR_ID}
-          class="rounded-box border-2 border-tertiary bg-white px-4 py-3 text-corps-mobile"
+          class="rounded-lg border border-noir/45 bg-white px-4 py-3 text-corps-mobile focus-visible:outline-tertiary"
         />
         {loginError !== undefined && (
           <p id={ERROR_ID} role="alert" class="text-mandarine">
