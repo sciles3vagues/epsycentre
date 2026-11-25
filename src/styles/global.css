@@ -15,6 +15,8 @@
   --color-abricot: #f4a04a;
   --color-noir: #121212;
   --color-fond: #fbf9f5;
+  /* Not in Figma — back office only: destructive actions (5.6:1 on white). */
+  --color-danger: #c62828;
 
   /* Not in Figma — WCAG AA text variants (≥ 4.5:1 on fond). ON HOLD: don't use until the designer decides. */
   --color-secondary-strong: #10816e;

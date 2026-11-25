@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { actions } from 'astro:actions';
 
 import { errorMessage } from '@/components/admin/action-error';
-import { BUTTON_PRIMARY, BUTTON_SECONDARY } from '@/components/admin/classes';
+import { BUTTON_DANGER, BUTTON_PRIMARY, BUTTON_SECONDARY } from '@/components/admin/classes';
 import { EMPTY_GROUPE, EMPTY_MEMBER, uniqueId, withoutOrder } from '@/components/admin/entries';
 import { EntryList } from '@/components/admin/EntryList';
 import { GroupeForm } from '@/components/admin/GroupeForm';
+import { PlusIcon, TrashIcon } from '@/components/admin/icons';
 import { TeamForm } from '@/components/admin/TeamForm';
 import { useConfirm } from '@/components/admin/useConfirm';
 
@@ -134,7 +135,7 @@ export default function AdminApp({ initial }: Props) {
   async function deleteEntry(collection: Collection, index: number): Promise<void> {
     const list = listOf(collection) as (Member | Groupe)[];
     const entry = list[index];
-    if (entry === undefined || !(await confirm(`Supprimer « ${entry.name} » ?`, 'Supprimer'))) {
+    if (entry === undefined || !(await confirm(`Supprimer « ${entry.name} » ?`, 'Supprimer', true))) {
       return;
     }
     const next = list.filter((_, position) => position !== index);
@@ -173,7 +174,7 @@ export default function AdminApp({ initial }: Props) {
   }
 
   async function discard(): Promise<void> {
-    if (!(await confirm('Annuler toutes les modifications non publiées ?', 'Annuler les modifications'))) {
+    if (!(await confirm('Annuler toutes les modifications non publiées ?', 'Annuler les modifications', true))) {
       return;
     }
     if (!(await run(() => actions.admin.discardDrafts(), 'Modifications annulées.')).isOk) {
@@ -263,6 +264,7 @@ export default function AdminApp({ initial }: Props) {
               disabled={isBusy || editing !== null}
               onClick={() => setEditing({ collection, index: null })}
             >
+              <PlusIcon />
               {add}
             </button>
           </>
@@ -273,7 +275,7 @@ export default function AdminApp({ initial }: Props) {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-4 rounded-card bg-white p-5 md:p-8">
+      <div className="flex flex-col gap-4 rounded-card bg-white p-5 shadow-sm md:p-8">
         <p>
           {hasChanges ? <strong>Modifications non publiées.</strong> : 'Tout est publié.'}{' '}
           {publishedAt !== null && `Dernière publication : ${DATE_FORMAT.format(new Date(publishedAt))}.`}
@@ -288,7 +290,8 @@ export default function AdminApp({ initial }: Props) {
             Publier les modifications
           </button>
           {hasChanges && (
-            <button type="button" className={BUTTON_SECONDARY} disabled={isBusy} onClick={() => void discard()}>
+            <button type="button" className={BUTTON_DANGER} disabled={isBusy} onClick={() => void discard()}>
+              <TrashIcon />
               Annuler les modifications
             </button>
           )}
