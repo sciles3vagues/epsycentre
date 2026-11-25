@@ -39,16 +39,18 @@ Before declaring work done, run `pnpm lint && pnpm build`; run `pnpm test:e2e` w
 
 ```
 src/
-├── pages/        # file-based routes (.astro); robots.txt.ts and llms.txt.ts are generated endpoints
-├── layouts/      # Layout.astro — <html lang>, <head>, skip link, <main id="contenu">
+├── actions/      # Astro Actions (back office: admin/auth.ts, admin/content.ts)
+├── pages/        # file-based routes (.astro); robots.txt.ts and llms.txt.ts are generated endpoints; backoffice.astro, contenu/, media/ run on demand
+├── layouts/      # Layout.astro — <html lang>, <head>, skip link, <main id="contenu">; BackofficeLayout.astro (noindex, no header/footer)
 ├── components/   # .astro (static) or .tsx (interactive islands only); Seo.astro = all meta tags
 ├── config/       # site.ts (name, locale, booking URL…), navigation.ts (nav links), breakpoints.ts (media queries shared with scripts)
-├── lib/          # framework-agnostic helpers (cn.ts, dom.ts, on-scroll-frame.ts)
+├── lib/          # helpers (cn.ts, dom.ts, on-scroll-frame.ts) and server-side back-office modules (content schemas, Blobs stores, session)
 ├── scripts/      # client-side behaviour as TS modules (dialog.ts, header/*) — imported by a one-line <script> in components
 ├── styles/       # global.css — Tailwind import, @theme tokens, base a11y styles
 └── assets/       # images processed by astro:assets
 tests/            # Playwright specs (a11y.spec.ts — add each new route to ROUTES; header.spec.ts)
 public/           # files served as-is (favicons, OG images, fonts)
+docs/             # backoffice.md (back-office architecture), guide-backoffice.md (client guide, French)
 ```
 
 Import from `src` with the `@/` alias (`@/components/Seo.astro`).
@@ -106,6 +108,7 @@ Source: Figma "Epsycentre" › Desktop (file `Y6gOus25wcsC40TNDZ85UL`, node `7:5
 - **Scroll reveal**: add `data-reveal="fade|pop|wipe"` (optional `style="--reveal-delay: 200ms"` to stagger) and import `initReveal` from `src/scripts/reveal.ts` in the component. Content stays visible without JS and with reduced motion (CSS in `global.css`).
 - **Pinned scroll screens** (Les TCCE): `data-scroll-steps` on the section + `data-step` per screen (`tcce/TcceScreen.astro`), driven by `src/scripts/scroll-steps.ts`. The section starts one viewport early behind the previous section (which needs `relative z-10`) for the curtain entrance. It falls back to normal flow with reduced motion, short viewports, or any screen taller than the viewport. Each screen gets half a viewport of scroll (`STEP_SCROLL`).
 - **Team & groupes** (L’équipe, Les groupes): `team` and `groupes` content collections (schemas in `src/lib/content-schemas.ts`). Real content is published from the back office into Netlify Blobs and never committed; `src/content/published-loader.ts` fetches it from the live site (`/contenu/{equipe,groupes}.json`) on Netlify builds and reads Blobs elsewhere (emulated by `astro dev`). No placeholder data: if it can't be read, the build logs an error and the section shows an “unavailable” message. Team cards in `team/MemberCard.astro`, details in `team/MemberModal.astro` (`ui/Modal.astro`); groups in `groupes/GroupPill.astro`.
+- **Back office** (`/backoffice`): see [docs/backoffice.md](docs/backoffice.md) (architecture, env vars, Netlify setup) and [docs/guide-backoffice.md](docs/guide-backoffice.md) (client guide, French). Editor island in `components/admin/`. Keep `/backoffice` out of the sitemap, nav, `llms.txt` and `robots.txt`; every new admin action must call `requireAdmin` first.
 - **Modals**: reuse `ui/Sheet.astro` + `src/scripts/dialog.ts` (including for the booking modal). Page scroll lock while a modal is open is global (`global.css`).
 
 ## TypeScript & code style
