@@ -24,6 +24,8 @@ export default defineConfig({
       // Shared back-office password (Netlify env var, `.env` locally). Optional so builds work without it;
       // login is refused when unset.
       ADMIN_PASSWORD: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Netlify build hook URL, called by « Publier ». Unset locally: publishing then skips the rebuild.
+      NETLIFY_BUILD_HOOK_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
   // Back-office session (Netlify Blobs driver, set by the adapter).
