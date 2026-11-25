@@ -1,20 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
+
 import GroupPill from '@/components/groupes/GroupPill.astro';
 import Section from '@/components/ui/Section.astro';
 
-// TODO: replace the placeholder with each group's description.
-const PLACEHOLDER = 'Texte thérapie de groupe à ajouter.';
-
-const GROUPS = [
-  'Trouble bipolaire',
-  'Dépression',
-  'Gestion des émotions',
-  'TOC',
-  'Affirmation de soi',
-  'Anxiété sociale',
-  'TDAH',
-  'Insomnie',
-];
+const groupes = (await getCollection('groupes')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Section
@@ -25,9 +15,9 @@ const GROUPS = [
   ctaVariant="solid"
 >
   <ul class="mx-auto flex max-w-279 flex-col items-center gap-5 md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-20">
-    {GROUPS.map(name => (
+    {groupes.map(({ data }) => (
       <li>
-        <GroupPill name={name} description={PLACEHOLDER} />
+        <GroupPill name={data.name} description={data.description} />
       </li>
     ))}
   </ul>
