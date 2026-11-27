@@ -21,7 +21,7 @@ export const teamMemberSchema = z.object({
   order: z.number().int(),
   name: text(100),
   jobTitle: text(100),
-  description: text(1000),
+  description: z.string().trim().max(1000).optional(),
   publics: text(2000),
   problematiques: text(2000),
   modalites: text(2000),

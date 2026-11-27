@@ -87,8 +87,8 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
         />
       </div>
       <Field
-        label="Description"
-        value={draft.description}
+        label="Description (optionnel)"
+        value={draft.description ?? ''}
         maxLength={1000}
         isMultiline
         onChange={description => update({ description })}

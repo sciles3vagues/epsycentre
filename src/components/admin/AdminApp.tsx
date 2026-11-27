@@ -90,7 +90,7 @@ export default function AdminApp({ initial }: Props) {
     return { isOk: true, data: data as T };
   }
 
-  async function saveList(collection: Collection, next: Member[] | Groupe[], success: string): Promise<boolean> {
+  async function saveList(collection: Collection, next: (Member | Groupe)[], success: string): Promise<boolean> {
     const result =
       collection === 'team'
         ? await run(() => actions.admin.saveTeam({ entries: next as Member[] }), success)
@@ -101,7 +101,7 @@ export default function AdminApp({ initial }: Props) {
     if (collection === 'team') {
       setTeam(next as Member[]);
     } else {
-      setGroupes(next);
+      setGroupes(next as Groupe[]);
     }
     setHasChanges(true);
     return true;

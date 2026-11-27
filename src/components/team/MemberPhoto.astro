@@ -1,10 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 
-import placeholder from '@/assets/images/team/placeholder.jpg';
-
 interface Props {
-  /** Blobs key of the photo; the placeholder is shown without one. */
+  /** Blobs key of the photo; without one, an empty block keeps the card's portrait shape. */
   photo: string | undefined;
   name: string;
   sizes: string;
@@ -15,11 +13,11 @@ const { photo, name, sizes, class: className } = Astro.props;
 
 // Portrait crop done by the Image CDN, same ratio as the card (898:1246), whatever the uploaded photo's shape.
 const WIDTH = 652;
-const HEIGHT = Math.round((WIDTH * placeholder.height) / placeholder.width);
+const HEIGHT = Math.round((WIDTH * 1246) / 898);
 ---
 
 {photo === undefined ? (
-  <Image src={placeholder} alt="" class={className} />
+  <div aria-hidden="true" class={`bg-noir/5 ${className ?? ''}`} />
 ) : (
   <Image
     src={`/media/${photo}`}

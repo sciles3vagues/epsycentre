@@ -11,12 +11,7 @@ const idOf = (item: unknown): string => {
   throw new Error(`Published entry without a string id: ${JSON.stringify(item)}`);
 };
 
-/** Netlify builds can't read Blobs, so they fetch the published content from the live site. */
-async function fetchFromLiveSite(collection: PublishedCollection): Promise<unknown[]> {
-  const siteUrl = process.env.URL;
-  if (siteUrl === undefined) {
-    throw new Error('the URL environment variable is missing');
-  }
+async function fetchFromLiveSite(collection: PublishedCollection, siteUrl: string): Promise<unknown[]> {
   const url = new URL(`/contenu/${PUBLISHED_SLUGS[collection]}.json`, siteUrl);
   const response = await fetch(url);
   if (!response.ok) {
@@ -29,10 +24,24 @@ async function fetchFromLiveSite(collection: PublishedCollection): Promise<unkno
   return data as unknown[];
 }
 
+async function loadPublished(collection: PublishedCollection): Promise<unknown[]> {
+  if (process.env.NETLIFY === 'true') {
+    if (process.env.URL === undefined) {
+      throw new Error('the URL environment variable is missing');
+    }
+    return fetchFromLiveSite(collection, process.env.URL);
+  }
+  const liveSiteUrl = process.env.PUBLISHED_SITE_URL;
+  if (liveSiteUrl !== undefined && liveSiteUrl !== '') {
+    return fetchFromLiveSite(collection, liveSiteUrl);
+  }
+  return readPublished(collection);
+}
+
 /**
- * Content published from the back office: fetched from the live site on Netlify builds, read from Blobs
- * elsewhere (emulated by `astro dev`). If it can't be read, the collection is empty and the section shows
- * an "unavailable" message.
+ * Content published from the back office. Netlify builds fetch it from their own production URL; elsewhere it is
+ * fetched from `PUBLISHED_SITE_URL` when set, otherwise read from Blobs (emulated by `astro dev`). If it can't be
+ * read, the collection is empty and the section shows an "unavailable" message.
  */
 export function publishedLoader(collection: PublishedCollection): Loader {
   return {
@@ -40,7 +49,7 @@ export function publishedLoader(collection: PublishedCollection): Loader {
     load: async context => {
       let items: unknown[] = [];
       try {
-        items = process.env.NETLIFY === 'true' ? await fetchFromLiveSite(collection) : await readPublished(collection);
+        items = await loadPublished(collection);
       } catch (error) {
         context.logger.error(
           `Published ${collection} unavailable: ${error instanceof Error ? error.message : String(error)}`
