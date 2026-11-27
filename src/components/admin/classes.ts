@@ -11,10 +11,12 @@ export const BUTTON_NEUTRAL = `${BUTTON} ${SMALL} border-noir/25 bg-white text-n
 /** Destructive actions. */
 export const BUTTON_DANGER = `${BUTTON} ${SMALL} border-danger bg-white text-danger enabled:hover:bg-danger enabled:hover:text-white`;
 export const BUTTON_DANGER_SOLID = `${BUTTON} border-danger bg-danger text-white enabled:hover:bg-white enabled:hover:text-danger`;
-// Light grey border (visible labels carry the field identity); placeholders ≥ 4.5:1; blue focus outline
-// instead of the global `outline-current` (black).
+// Light grey border and placeholder (visible labels carry the field identity); blue focus outline instead of the
+// global `outline-current` (black).
 export const INPUT =
-  'w-full rounded-lg border border-noir/25 bg-white px-3 py-2 placeholder:text-noir/60 focus-visible:outline-tertiary';
+  'w-full rounded-lg border border-noir/15 bg-white px-3 py-2 placeholder:text-petit placeholder:text-noir/45 focus-visible:outline-tertiary';
+/** Native arrow replaced by a centred chevron (see TeamForm), with room on the right. */
+export const SELECT = `${INPUT} cursor-pointer appearance-none pr-10`;
 /** A <label> styled as a button for a visually hidden file input placed just before it (`peer`). */
 export const FILE_BUTTON =
   'inline-flex cursor-pointer items-center justify-center gap-2 self-start rounded-pill border-2 border-tertiary bg-tertiary/10 px-4 py-2 font-heading text-petit text-noir hover:bg-tertiary/20 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-tertiary peer-disabled:cursor-not-allowed peer-disabled:opacity-50 motion-safe:transition-colors';

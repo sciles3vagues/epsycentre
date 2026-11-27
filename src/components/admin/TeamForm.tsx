@@ -6,11 +6,11 @@ import {
   BUTTON_PRIMARY,
   BUTTON_SECONDARY,
   FILE_BUTTON,
-  INPUT,
   PANEL,
+  SELECT,
 } from '@/components/admin/classes';
 import { Field } from '@/components/admin/Field';
-import { PlusIcon, TrashIcon, UploadIcon } from '@/components/admin/icons';
+import { ChevronDownIcon, PlusIcon, TrashIcon, UploadIcon } from '@/components/admin/icons';
 import { useFocusOnMount } from '@/components/admin/useFocusOnMount';
 
 import type { Member, Rdv } from '@/components/admin/entries';
@@ -158,17 +158,22 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
               <legend className="sr-only">Moyen de RDV {index + 1}</legend>
               <label className="flex flex-col gap-1 md:w-56">
                 <span className="font-semibold">Type</span>
-                <select
-                  value={line.type}
-                  onChange={event => updateLine(line.key, { type: event.target.value as Rdv['type'] })}
-                  className={INPUT}
-                >
-                  {Object.entries(RDV_TYPES).map(([type, { label }]) => (
-                    <option key={type} value={type}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
+                <span className="relative">
+                  <select
+                    value={line.type}
+                    onChange={event => updateLine(line.key, { type: event.target.value as Rdv['type'] })}
+                    className={SELECT}
+                  >
+                    {Object.entries(RDV_TYPES).map(([type, { label }]) => (
+                      <option key={type} value={type}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-noir/60">
+                    <ChevronDownIcon />
+                  </span>
+                </span>
               </label>
               <div className="md:flex-1">
                 <Field

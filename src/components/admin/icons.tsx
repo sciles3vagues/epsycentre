@@ -58,6 +58,12 @@ export const UploadIcon = () => (
   </Icon>
 );
 
+export const ChevronDownIcon = () => (
+  <Icon>
+    <path d="m6 9 6 6 6-6" />
+  </Icon>
+);
+
 export const PlusIcon = () => (
   <Icon>
     <path d="M5 12h14" />
