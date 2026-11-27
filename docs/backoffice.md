@@ -10,7 +10,7 @@ never in git. The site is rebuilt only when an admin clicks **Publier**. Client 
 Admin ─► /backoffice ─► Astro Actions (requireAdmin, Zod) ─► Netlify Blobs
   Enregistrer  → draft/<collection>
   Publier      → published/<collection>, delete unused photos, POST build hook
-Netlify build ─► published-loader fetches ${URL}/contenu/{equipe,groupes}.json ─► static HTML
+Netlify build ─► published-loader reads published/<collection> from Blobs ─► static HTML
 ```
 
 Only `/backoffice`, `/contenu/[collection].json`, `/media/[key]` and `/_actions/admin.*` run on demand. Everything
@@ -41,7 +41,8 @@ else is prerendered.
 
 ## Public loader
 
-- **Netlify builds** fetch the published JSON from their own URL (`URL`).
+- **Netlify builds** read the published entries straight from Blobs. Fetching the site's own URL fails when Netlify
+  site protection is on (401).
 - **Local dev** fetches from `PUBLISHED_SITE_URL` when it is set; otherwise it reads Blobs, which `astro dev`
   emulates in `.netlify/blobs-serve/` (gitignored).
 

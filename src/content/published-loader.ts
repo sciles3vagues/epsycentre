@@ -25,23 +25,17 @@ async function fetchFromLiveSite(collection: PublishedCollection, siteUrl: strin
 }
 
 async function loadPublished(collection: PublishedCollection): Promise<unknown[]> {
-  if (process.env.NETLIFY === 'true') {
-    if (process.env.URL === undefined) {
-      throw new Error('the URL environment variable is missing');
-    }
-    return fetchFromLiveSite(collection, process.env.URL);
-  }
   const liveSiteUrl = process.env.PUBLISHED_SITE_URL;
-  if (liveSiteUrl !== undefined && liveSiteUrl !== '') {
+  if (process.env.NETLIFY !== 'true' && liveSiteUrl !== undefined && liveSiteUrl !== '') {
     return fetchFromLiveSite(collection, liveSiteUrl);
   }
   return readPublished(collection);
 }
 
 /**
- * Content published from the back office. Netlify builds fetch it from their own production URL; elsewhere it is
- * fetched from `PUBLISHED_SITE_URL` when set, otherwise read from Blobs (emulated by `astro dev`). If it can't be
- * read, the collection is empty and the section shows an "unavailable" message.
+ * Content published from the back office. Netlify builds read Blobs directly (the public URL may be access-protected);
+ * locally it is fetched from `PUBLISHED_SITE_URL` when set, otherwise read from Blobs (emulated by `astro dev`). If it
+ * can't be read, the collection is empty and the section shows an "unavailable" message.
  */
 export function publishedLoader(collection: PublishedCollection): Loader {
   return {
