@@ -59,6 +59,10 @@
   --text-petit: 1rem;
   --text-petit--line-height: 1.25rem;
   --text-petit--font-weight: 400;
+  /* Back office field errors: 12px, regular weight. */
+  --text-erreur: 0.75rem;
+  --text-erreur--line-height: 1rem;
+  --text-erreur--font-weight: 400;
 
   --radius-card: 1.875rem;
   --radius-box: 1.25rem;

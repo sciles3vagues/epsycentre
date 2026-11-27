@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import {
   BUTTON_DANGER,
@@ -10,10 +10,13 @@ import {
   SELECT,
 } from '@/components/admin/classes';
 import { Field } from '@/components/admin/Field';
+import { focusFirstInvalid, requiredErrors, withoutError } from '@/components/admin/form-errors';
 import { ChevronDownIcon, PlusIcon, TrashIcon, UploadIcon } from '@/components/admin/icons';
 import { useFocusOnMount } from '@/components/admin/useFocusOnMount';
 
 import type { Member, Rdv } from '@/components/admin/entries';
+import type { FormErrors } from '@/components/admin/form-errors';
+import type { SyntheticEvent } from 'react';
 
 const MAX_RDV = 5;
 
@@ -24,6 +27,8 @@ const RDV_TYPES = {
 } as const;
 
 type RdvLine = Rdv & { key: string };
+
+const rdvErrorKey = (lineKey: string): string => `rdv:${lineKey}`;
 
 interface Props {
   member: Member;
@@ -39,12 +44,51 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
   const [draft, setDraft] = useState(member);
   const [lines, setLines] = useState<RdvLine[]>(() => member.rdv.map(rdv => ({ ...rdv, key: crypto.randomUUID() })));
   const [isUploading, setIsUploading] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [attempts, setAttempts] = useState(0);
+  const formRef = useRef<HTMLFormElement>(null);
   const headingRef = useFocusOnMount<HTMLHeadingElement>();
   const photoId = useId();
 
-  const update = (changes: Partial<Member>): void => setDraft({ ...draft, ...changes });
-  const updateLine = (key: string, changes: Partial<Rdv>): void =>
+  useEffect(() => {
+    if (attempts > 0) {
+      focusFirstInvalid(formRef.current);
+    }
+  }, [attempts]);
+
+  const update = (changes: Partial<Member>): void => {
+    setDraft({ ...draft, ...changes });
+    setErrors(previous => Object.keys(changes).reduce(withoutError, previous));
+  };
+  const updateLine = (key: string, changes: Partial<Rdv>): void => {
     setLines(lines.map(line => (line.key === key ? { ...line, ...changes } : line)));
+    setErrors(previous => withoutError(previous, rdvErrorKey(key)));
+  };
+
+  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    const found = requiredErrors([
+      { key: 'name', label: 'Nom', value: draft.name },
+      { key: 'jobTitle', label: 'Fonction', value: draft.jobTitle },
+      { key: 'publics', label: 'Public accueilli', value: draft.publics },
+      { key: 'problematiques', label: 'Problématiques', value: draft.problematiques },
+      { key: 'modalites', label: 'Modalités de consultation', value: draft.modalites },
+      ...lines.map(line => ({
+        key: rdvErrorKey(line.key),
+        label: `${RDV_TYPES[line.type].label} (moyen de RDV ${lines.indexOf(line) + 1})`,
+        value: line.value,
+      })),
+    ]);
+    setErrors(found);
+    if (Object.keys(found).length > 0) {
+      setAttempts(count => count + 1);
+      return;
+    }
+    if (formRef.current?.reportValidity() === false) {
+      return;
+    }
+    onSave({ ...draft, rdv: lines.map(({ key: _key, ...rdv }) => rdv) });
+  };
 
   const handlePhoto = async (file: File | undefined): Promise<void> => {
     if (file === undefined) {
@@ -59,13 +103,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
   };
 
   return (
-    <form
-      className={PANEL}
-      onSubmit={event => {
-        event.preventDefault();
-        onSave({ ...draft, rdv: lines.map(({ key: _key, ...rdv }) => rdv) });
-      }}
-    >
+    <form ref={formRef} noValidate className={PANEL} onSubmit={handleSubmit}>
       <h3 ref={headingRef} tabIndex={-1} className="font-heading text-nom-mobile md:text-nom">
         {isNew ? 'Nouveau membre' : `Modifier « ${member.name} »`}
       </h3>
@@ -76,6 +114,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
           value={draft.name}
           maxLength={100}
           placeholder="Dr Prénom Nom"
+          error={errors.name}
           onChange={name => update({ name })}
         />
         <Field
@@ -83,6 +122,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
           value={draft.jobTitle}
           maxLength={100}
           placeholder="Psychologue"
+          error={errors.jobTitle}
           onChange={jobTitle => update({ jobTitle })}
         />
       </div>
@@ -90,6 +130,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
         label="Description (optionnel)"
         value={draft.description ?? ''}
         maxLength={1000}
+        isOptional
         isMultiline
         onChange={description => update({ description })}
       />
@@ -98,6 +139,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
         value={draft.publics}
         maxLength={2000}
         isMultiline
+        error={errors.publics}
         onChange={publics => update({ publics })}
       />
       <Field
@@ -105,6 +147,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
         value={draft.problematiques}
         maxLength={2000}
         isMultiline
+        error={errors.problematiques}
         onChange={problematiques => update({ problematiques })}
       />
       <Field
@@ -112,6 +155,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
         value={draft.modalites}
         maxLength={2000}
         isMultiline
+        error={errors.modalites}
         onChange={modalites => update({ modalites })}
       />
 
@@ -183,6 +227,7 @@ export function TeamForm({ member, isNew, isBusy, onSave, onCancel, onUploadPhot
                   maxLength={300}
                   pattern={line.type === 'url' ? 'https://.+' : undefined}
                   placeholder={placeholder}
+                  error={errors[rdvErrorKey(line.key)]}
                   onChange={value => updateLine(line.key, { value })}
                 />
               </div>
