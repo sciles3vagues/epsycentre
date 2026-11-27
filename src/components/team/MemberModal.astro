@@ -9,6 +9,7 @@ import UsersIcon from '@/assets/icons/users.svg';
 import MemberPhoto from '@/components/team/MemberPhoto.astro';
 import Cta from '@/components/ui/Cta.astro';
 import Modal from '@/components/ui/Modal.astro';
+import { capitalizeFirst, formatPhone } from '@/lib/format-text';
 
 import type { CollectionEntry } from 'astro:content';
 
@@ -47,7 +48,7 @@ const ICON = 'size-5 shrink-0 text-mandarine';
         <h3 id={titleId} class="font-heading text-grand-mobile md:typo-grand">
           {name}
         </h3>
-        <p>{jobTitle}</p>
+        <p class="uppercase">{jobTitle}</p>
         {description !== undefined && description !== '' && <p>{description}</p>}
       </div>
 
@@ -58,7 +59,7 @@ const ICON = 'size-5 shrink-0 text-mandarine';
               <Icon aria-hidden="true" focusable="false" class={ICON} />
               {label}
             </dt>
-            <dd class="pl-7">{value}</dd>
+            <dd class="pl-7">{capitalizeFirst(value)}</dd>
           </div>
         ))}
         <div>
@@ -88,7 +89,7 @@ const ICON = 'size-5 shrink-0 text-mandarine';
                         href={type === 'phone' ? telHref(value) : `mailto:${value}`}
                         class="text-tertiary underline underline-offset-4"
                       >
-                        {value}
+                        {type === 'phone' ? formatPhone(value) : value}
                       </a>
                     )}
                   </li>

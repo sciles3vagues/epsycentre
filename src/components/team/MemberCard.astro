@@ -39,7 +39,9 @@ const { name, jobTitle, photo, modalId } = Astro.props;
     </h3>
     <div class="contents md:grid md:grid-rows-[0fr] md:group-focus-within/card:grid-rows-[1fr] md:group-hover/card:grid-rows-[1fr] md:motion-safe:transition-[grid-template-rows] md:motion-safe:duration-300 md:motion-safe:ease-in-out md:[@media(hover:none)]:grid-rows-[1fr]">
       <div class="contents md:flex md:min-h-0 md:flex-col md:items-start md:gap-2.5 md:overflow-hidden md:pb-1">
-        <p class="col-start-1 row-start-3 pt-2.5 pr-12 pb-3 pl-3 text-petit text-noir md:p-0 md:pt-2.5">{jobTitle}</p>
+        <p class="col-start-1 row-start-3 pt-2.5 pr-12 pb-3 pl-3 text-petit text-noir uppercase md:p-0 md:pt-2.5">
+          {jobTitle}
+        </p>
         <button
           type="button"
           data-dialog-open={modalId}
