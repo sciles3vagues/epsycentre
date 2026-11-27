@@ -48,12 +48,13 @@ else is prerendered.
 
 ## Environment variables
 
-| Variable                 | Where                   | Purpose                                                                 |
-| ------------------------ | ----------------------- | ----------------------------------------------------------------------- |
-| `ADMIN_PASSWORD`         | Netlify, `.env` locally | Shared back-office password. Login is refused when unset.               |
-| `NETLIFY_BUILD_HOOK_URL` | Netlify                 | Build hook on `main`, called by **Publier**. Unset locally: no rebuild. |
-| `SITE_URL`               | Netlify, CI             | Canonical, sitemap and Open Graph URLs.                                 |
-| `PUBLISHED_SITE_URL`     | `.env` locally          | Live site whose published content local dev fetches.                    |
+| Variable                 | Where                   | Purpose                                                                     |
+| ------------------------ | ----------------------- | --------------------------------------------------------------------------- |
+| `ADMIN_PASSWORD`         | Netlify, `.env` locally | Shared back-office password. Login is refused when unset.                   |
+| `NETLIFY_BUILD_HOOK_URL` | Netlify                 | Build hook on `main`, called by **Publier**. Unset locally: no rebuild.     |
+| `NETLIFY_BLOBS_TOKEN`    | Netlify (Builds scope)  | Personal access token: lets the build read Blobs (it has no Blobs context). |
+| `SITE_URL`               | Netlify, CI             | Canonical, sitemap and Open Graph URLs.                                     |
+| `PUBLISHED_SITE_URL`     | `.env` locally          | Live site whose published content local dev fetches.                        |
 
 The first two are `astro:env` server secrets, declared in `astro.config.mjs`.
 

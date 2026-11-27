@@ -8,8 +8,14 @@ type Stage = 'draft' | 'published';
 
 const META_KEY = 'meta/published-at';
 
+/** Netlify builds get no Blobs context: they authenticate with `NETLIFY_BLOBS_TOKEN` (Builds scope) and the built-in `SITE_ID`. */
+const buildCredentials = (): { siteID: string; token: string } | undefined => {
+  const { SITE_ID: siteID, NETLIFY_BLOBS_TOKEN: token } = process.env;
+  return siteID !== undefined && siteID !== '' && token !== undefined && token !== '' ? { siteID, token } : undefined;
+};
+
 // Strong consistency: the rebuild triggered right after « Publier » must read the new version.
-const contentStore = () => getStore({ name: 'content', consistency: 'strong' });
+const contentStore = () => getStore({ name: 'content', consistency: 'strong', ...buildCredentials() });
 
 const keyOf = (stage: Stage, collection: PublishedCollection): string => `${stage}/${collection}`;
 
